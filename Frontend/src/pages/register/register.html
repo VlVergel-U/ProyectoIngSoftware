@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Registro</title>
+    <link rel="stylesheet" href="../../../assets/css/register.css">
+    <script src="../../../assets/js/register.js" defer></script>
+</head>
+<body>
+    <section class="wrapper">
+        <form id="register-form">
+            <h1>Crear Usuario</h1>
+            <div class="inputbox">
+                <input type="text" name="user" required>
+                <i class='bx bxs-user'></i>
+                <span class="text-Email">Nombre</span>
+            </div>
+            <div class="inputbox">
+                <input type="email" name="email" required>
+                <i class='bx bx-envelope'></i>
+                <span class="text-Email">Correo electrónico</span>
+            </div>
+            <div class="inputbox">
+                <input type="password" name="password" required>
+                <i class='bx bxs-lock-alt'></i>
+                <span class="text-password">Contraseña</span>
+            </div>
+            <div class="inputbox">
+                <input type="password" name="password2" required>
+                <i class='bx bxs-lock-alt'></i>
+                <span class="text-password">Confirmar contraseña</span>
+            </div>
+            <div class="inputbox">
+                <select name="rol" required>
+                    <option value="" disabled selected>Selecciona un rol</option>
+                    <option class="rol" value="administrador">Administrador</option>
+                    <option class="rol" value="vendedor">Vendedor</option>
+                </select>
+                <i class='bx bx-user-circle'></i>
+            </div>
+            <button type="submit">Registrarse</button>
+            <div class="register">
+                <p>¿Ya tienes una cuenta? <a href="#">Iniciar sesión</a></p>
+            </div>
+        </form>
+    </section>
+
+    
+</body>
+</html>
