@@ -3,6 +3,8 @@ import { sequelize } from "./database/database.js";
 
 import "./models/products.js"
 import "./models/category.js"
+import "./models/customer.js"
+import "./models/shopping.js"
 
 async function main (){
   try {
