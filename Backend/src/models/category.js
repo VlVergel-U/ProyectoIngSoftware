@@ -6,7 +6,7 @@ export const category = sequelize.define("category",{
     id_Category:{
         type:DataTypes.INTEGER,
         primaryKey:true,
-        unique: true
+        autoIncrement: true,
     },
     Trademark:{
         type:DataTypes.STRING(20),
@@ -20,3 +20,4 @@ category.hasMany(products,{
     foreignKey:"category_Type",
     sourceKey:"id_Category"
 })
+products.bel
