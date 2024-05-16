@@ -17,4 +17,6 @@ export const supplier = sequelize.define({
     Email:{
         type:DataTypes.STRING(20)    
     }
+},{
+    timestamps: false,
 })

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solo Cauchos - Agregar Producto</title>
+    <link rel="stylesheet" href="product.css">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="../LogoSoloCauchos.jpeg" alt="Solo Cauchos">
+            <h1>SOLO CAUCHOS</h1>
+            <span>2023-0075</span>
+        </div>
+        <nav>
+            <ul class="icono">
+                <li class="perfil"><img src="../../public/perfil-_2_.jpeg" alt="perfil"></li>
+                <li><img src="../../public/salida.jpeg" alt="salida"></li>
+            </ul>
+        </nav>
+    </header>
+
+    <h2>Agregar producto</h2>
+
+    <main>
+
+        <form id="addProductForm">
+            <div class="form-group">
+                <label for="product_id">ID del producto</label>
+                <input type="text" id="product_id" name="product_id" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Nombre</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Categoría</label>
+                <input type="text" id="category" name="category" required>
+            </div>
+            <div class="form-group">
+                <label for="quantity">Cantidad</label>
+                <input type="number" id="quantity" name="quantity" required>
+            </div>
+            <div class="form-group">
+                <label for="sell_price">Precio de venta</label>
+                <input type="number" id="sell_price" name="sell_price" required>
+            </div>
+            <div class="form-group">
+                <label for="buy_price">Precio de compra</label>
+                <input type="number" id="buy_price" name="buy_price" required>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary">Volver</button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    </main>
+
+    <script src="/Product/product.js"></script>
+</body>
+
+</html>

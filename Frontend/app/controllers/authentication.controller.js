@@ -1,7 +1,7 @@
 //authentication.controller.js
 
-import dotenv from 'dotenv'; 
-import { client } from '../db.js';
+const dotenv = require('dotenv');
+const { client } = require('../db.js');
 
 dotenv.config();
 
@@ -12,7 +12,7 @@ async function login(req, res) {
     }
 
     try {
-        const result = await client.query('SELECT * FROM users WHERE username = $1 AND password = $2', [user, password]);
+        const result = await client.query('SELECT * FROM user WHERE user_name = $1 AND password = $2', [user, password]);
         if (result.rows.length === 0) {
             return res.status(400).send({ status: 'Error al iniciar sesión', message: 'Usuario o contraseña incorrectos' });
         }
@@ -26,6 +26,7 @@ async function login(req, res) {
     }
 }
 
-export const methods = {
+const methods = {
     login,
 };
+module.exports = { methods };

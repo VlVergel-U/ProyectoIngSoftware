@@ -32,6 +32,8 @@ export const customer = sequelize.define("custmoer",{
         type:DataTypes.STRING(50),
         unique: true
     }
+},{
+    timestamps: false,
 })
 customer.hasMany(shopping,{
     foreignKey:"id_customer",
