@@ -21,10 +21,14 @@ export const createCategory= async () =>{
 
 export const createAdmin = async () =>{
     try{
+        const adminFound = await user.findOne()
+        if(adminFound)return;
+
         const adminRegistered = await user.create({
             user_name:"admin",
             poswarrd:"12345678"
         })
+        console.log("ID: "+adminFound.name)
     }catch(error){
         console.error(error);
     };

@@ -12,10 +12,10 @@ export const products = sequelize.define("products",{
         type:DataTypes.STRING(40),
     },
     shopping_price:{
-        type:DataTypes.BOOLEAN(10,2),
+        type:DataTypes.DOUBLE(10,2),
     },
     sale_price:{
-        type:DataTypes.BOOLEAN(10,2),
+        type:DataTypes.DOUBLE(10,2),
     },
     stock:{
         type:DataTypes.INTEGER(10),

@@ -20,4 +20,7 @@ category.hasMany(products,{
     foreignKey:"category_Type",
     sourceKey:"id_Category"
 })
-products.bel
+products.belongsTo(category,{
+    foreignKey:"category_Type",
+    targetId:"id_Category"
+})
