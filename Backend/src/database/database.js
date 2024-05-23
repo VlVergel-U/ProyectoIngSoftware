@@ -1,6 +1,9 @@
 import { Sequelize } from "sequelize";
+import 'dotenv/config'
 
-export const sequelize = new Sequelize('SoloCauchos', 'postgres', '1234', {
+const passwordDataBase = process.env.passwordDataBase;
+
+export const sequelize = new Sequelize('SoloCauchos', 'postgres', passwordDataBase, {
     host: 'localhost',
     dialect: 'postgres'
 });
