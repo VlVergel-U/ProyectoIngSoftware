@@ -1,7 +1,7 @@
 import server from "./app.js";
 import { sequelize } from "./database/database.js";
 
-async function main (){
+async function main() {
   try {
     await sequelize.sync({ force: false });
     server.listen(3000, () => {
