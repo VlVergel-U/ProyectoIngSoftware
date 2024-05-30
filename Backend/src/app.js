@@ -5,8 +5,6 @@ import userRoutes from "./routes/user.routes.js";
 import { createCategory, createAdmin } from "./libs/initialSetUp.js";
 
 const server = express();
-createCategory();
-createAdmin();
 
 server.use(express.json());
 server.use(
