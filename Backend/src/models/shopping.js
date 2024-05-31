@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 
+
 export const shopping = sequelize.define(
   "shopping",
   {
@@ -29,3 +30,4 @@ export const shopping = sequelize.define(
     timestamps: false,
   }
 );
+

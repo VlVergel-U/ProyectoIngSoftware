@@ -43,3 +43,7 @@ customer.hasMany(shopping, {
   foreignKey: "id_customer",
   sourceKey: "id_customer",
 });
+shopping.belongsTo(customer,{
+  foreignKey: "id_customer",
+  targetId: "id_customer",
+})

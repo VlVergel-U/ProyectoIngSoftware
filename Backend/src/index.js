@@ -1,9 +1,15 @@
 import server from "./app.js";
 import { sequelize } from "./database/database.js";
+import {detail}  from "./models/detail.js";
+import {customer} from "./models/customer.js"
+
+import { createCategory, createAdmin } from "./libs/initialSetUp.js";
 
 async function main() {
   try {
-    await sequelize.sync({ force: false });
+    await sequelize.sync({ force: true });
+    createCategory();
+    createAdmin();
     server.listen(3000, () => {
       console.log("Server listen on port", 3000);
     });

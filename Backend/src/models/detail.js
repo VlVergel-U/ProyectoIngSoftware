@@ -17,3 +17,6 @@ export const detail = sequelize.define(
     timestamps: false,
   }
 );
+
+products.belongsToMany(shopping, { through: detail });
+shopping.belongsToMany(products, { through: detail });
