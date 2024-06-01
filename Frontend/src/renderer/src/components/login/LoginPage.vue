@@ -1,92 +1,147 @@
 <template>
-  <div class="bg-custom h-screen bg-cover bg-center bg-blur">
+  <div class="bg-custom h-screen bg-cover bg-center">
     <div class="container mx-auto">
-
-      <div class="overflow-hidden font-sans h-screen flex items-center justify-center">
-        <div class="absolute bg-white rounded-full w-32 h-32 justify-center items-center flex border-2 border-black" style="margin-bottom: 460px;">
-          <img src="../../assets/icon.jpeg" alt="IMG" class="w-28 h-10"  />
+      <div
+        class="overflow-hidden font-sans h-screen flex items-center justify-center absolute inset-0 bg-opacity-50 backdrop-blur-[2px] z-0"
+      >
+        <div
+          class="absolute bg-white rounded-full w-32 h-32 justify-center items-center flex border-2 border-black"
+          style="margin-bottom: 460px"
+        >
+          <img src="../../assets/icon.png" alt="IMG" class="w-28 h-10" />
         </div>
 
-        <form class="bg-zinc-950 rounded-lg p-8 space-y-4 w-96 shadow-lg shadow-zinc-800" @submit.prevent="submitForm">
-
-          <div id="mensaje-de-error" v-if="mensaje">
-            <p class="text-red-700 text-center font-bold">Credenciales incorrectas</p>
+        <div
+          v-if="mensaje"
+          id="mensaje-de-error"
+          class="absolute flex -translate-y-80 bg-zinc-900 w-64 h-14 rounded-md items-center justify-center mb-6"
+        >
+          <p class="text-white text-center font-semibold mb-2 mt-3 select-none mx-4 my-4">
+            {{ mensajeTexto }}
+          </p>
+          <div
+            class="w-4 h-4 bg-red-600 flex items-center justify-center rounded-md absolute right-2 -translate-y-3 border border-red-950"
+          >
+            <span
+              class="material-symbols-outlined text-red-950 text-xl select-none cursor-pointer"
+              @click="mensaje = !mensaje"
+              >close</span
+            >
           </div>
+        </div>
 
-
+        <form
+          class="bg-zinc-950 rounded-lg p-8 space-y-4 w-96 shadow-2xl shadow-black border-2 border-zinc-900"
+          @submit.prevent="submitForm"
+        >
           <div class="flex flex-col items-center relative mt-14">
+            <p class="text-center text-xl font-semibold text-white mb-4">Ingresa Aquí</p>
 
-          <p class="text-center text-xl font-semibold text-white mb-4">Ingresa Aquí</p>
+            <div class="w-72">
+              <p class="text-left text-white font-semibold">Usuario</p>
+              <div class="relative my-2 mt-2">
+                <i
+                  class="fa fa-envelope absolute top-1/2 transform -translate-y-1/2 left-3 text-gray-400"
+                ></i>
+                <input
+                  v-model="user_name"
+                  class="input100 w-full border-b-2 border-solid border-neutral-500 pl-10 bg-zinc-950 py-2 text-white"
+                  type="text"
+                  name="user"
+                  placeholder="Ingresa tu usuario"
+                />
+              </div>
 
-          <div class="w-72">
-            <p class="text-left text-white font-semibold">Usuario</p>
-            <div class="relative my-2 mt-2">
-              <i class="fa fa-envelope absolute top-1/2 transform -translate-y-1/2 left-3 text-gray-400"></i>
-              <input v-model="user_name" class="input100 w-full border-b-2 border-solid border-neutral-500 pl-10 bg-zinc-950 py-2" type="text" name="user" placeholder="Ingresa tu usuario" />
-          </div>
-
-            <p class="text-left text-white font-semibold mt-6">Contraseña</p>
-            <div class="relative mt-2">
-              <i class="fa fa-lock absolute top-1/2 transform -translate-y-1/2 left-3 text-gray-400"></i>
-              <input v-model="poswarrd" class="input100 w-full border-b-2 border-solid border-neutral-500 pl-10 bg-zinc-950 py-2" type="password" name="pass" placeholder="Ingresa tu contraseña" />
+              <p class="text-left text-white font-semibold mt-6">Contraseña</p>
+              <div class="relative mt-2">
+                <i
+                  class="fa fa-lock absolute top-1/2 transform -translate-y-1/2 left-3 text-gray-400"
+                ></i>
+                <input
+                  v-model="poswarrd"
+                  class="input100 w-full border-b-2 border-solid border-neutral-500 pl-10 bg-zinc-950 py-2 text-white pr-3"
+                  :type="type"
+                  name="pass"
+                  placeholder="Ingresa tu contraseña"
+                />
+                <span
+                  class="material-symbols-outlined text-gray-400 absolute mt-2 right-2 cursor-pointer select-none"
+                  @click="viewPassword"
+                >
+                  {{ view ? 'visibility' : 'visibility_off' }}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-
 
           <div class="flex justify-center">
-            <button type="submit" class="w-72 h-12 bg-red-700 text-white font-semibold rounded-3xl transition duration-300 hover:bg-yellow-600 my-4">
+            <button
+              type="submit"
+              class="w-72 h-12 bg-red-700 text-white font-semibold rounded-3xl transition duration-300 hover:bg-red-600 my-4"
+            >
               Iniciar sesión
             </button>
           </div>
-          <a class="flex justify-center text-red-400 font-semibold" @click="goToRegister">Registrar usuario</a>
+          <a
+            class="flex justify-center text-red-400 font-semibold cursor-pointer select-none"
+            @click="goToRegister"
+            >Registrar usuario</a
+          >
         </form>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      user_name: '',
-      poswarrd: '',
-      mensaje: false
-    }
-  },
-  methods: {
-    submitForm() {
-      const user_name = this.user_name;
-      const poswarrd = this.poswarrd;
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-      fetch('http://localhost:3000/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ user_name, poswarrd })
-      })
+const user_name = ref('')
+const poswarrd = ref('')
+const mensaje = ref(false)
+const view = ref(false)
+const type = ref('password')
+const mensajeTexto = ref('')
+
+const router = useRouter()
+
+const viewPassword = () => {
+  view.value = !view.value
+  type.value = type.value === 'password' ? 'text' : 'password'
+}
+
+const submitForm = () => {
+  if (!user_name.value || !poswarrd.value) {
+    mensajeTexto.value = 'Por favor, llene todos los campos'
+    mensaje.value = true
+  } else {
+    fetch('http://localhost:3000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ user_name: user_name.value, poswarrd: poswarrd.value })
+    })
       .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Error de inicio de sesión');
+        if (!response.ok) {
+          throw new Error('Credenciales incorrectas')
         }
+        return response.json()
       })
       .then((data) => {
-        if (data.message === "Usuario autenticado") {
-            this.$router.push({ path: `/home` })
+        if (data.message === 'Usuario autenticado') {
+          router.push({ path: `/home` })
         } else {
-          console.error("Credenciales incorrectas");
-          this.mensaje = true;
+          mensajeTexto.value = 'Credenciales incorrectas'
+          mensaje.value = true
         }
       })
       .catch((error) => {
-        console.error('Error de inicio de sesión:', error.message);
-        this.mensaje = true;
-      });
-    }
+        console.error('Error de inicio de sesión:', error.message)
+        mensajeTexto.value = error.message
+        mensaje.value = true
+      })
   }
 }
 </script>
