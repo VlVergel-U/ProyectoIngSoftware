@@ -7,7 +7,7 @@ import { createCategory, createAdmin } from "./libs/initialSetUp.js";
 
 async function main() {
   try {
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ force: false });
     createCategory();
     createAdmin();
     server.listen(3000, () => {
