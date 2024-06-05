@@ -1,6 +1,6 @@
 <template>
-  <div class="overflow-hidden fixed inset-0 flex items-center justify-center">
-    <div class="bg-transparent fixed inset-0"></div>
+  <div class="overflow-hidden fixed inset-0 flex items-center justify-center w-auto h-auto">
+    <div class="bg-gray-950 bg-opacity-30 fixed inset-0"></div>
     <div class="z-50">
       <div
         class="relative shadow-lg hover:shadow-xl transition duration-300 rounded-lg bg-white w-96"
@@ -20,7 +20,7 @@
             ></path>
           </svg>
         </button>
-        <h2 class="text-2xl font-semibold mb-4 pt-8"  :class="{'text-gray-800': darkMode, 'text-gray-100':!darkMode}">Agregar Producto</h2>
+        <h2 class="text-2xl font-semibold mb-4 pt-8 text-center"  :class="{'text-gray-800': darkMode, 'text-gray-100':!darkMode}">Agregar Producto</h2>
         <form @submit.prevent="submitForm" class="px-10 py-4">
           <div class="mb-4 text-left">
             <label for="name" class="block text-sm font-medium"  :class="{'text-gray-800': darkMode, 'text-gray-100':!darkMode}">Nombre</label>
@@ -83,7 +83,7 @@
           <div class="mb-4 text-left pb-4">
             <label for="category" class="block text-sm font-medium"  :class="{'text-gray-800': darkMode, 'text-gray-100':!darkMode}">Categoría</label>
             <select
-              v-model="category_Type"
+              v-model="category"
               id="category"
               name="category"
               class="mt-1 block w-full border border-gray-200 h-8 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200" :class="{ 'bg-zinc-600 text-white ': !darkMode , 'border-zinc-500': !darkMode}"
@@ -95,7 +95,7 @@
             </select>
           </div>
           <div class="flex justify-center">
-            <button type="submit" class="text-white px-4 py-2 rounded font-semibold" :class="{'bg-red-600': darkMode, 'bg-red-800':!darkMode}">
+            <button type="submit" class="text-white px-4 py-2 rounded font-semibold bg-primary">
               Agregar
             </button>
             <button
@@ -126,7 +126,7 @@ const shopping_price = ref(null)
 const sale_price = ref(null)
 const stock = ref(null)
 const trademark = ref('')
-const category_Type = ref('')
+const category = ref('')
 const errorMessage = ref('')
 
 const closeForm = () => {
@@ -142,14 +142,14 @@ const submitForm = async () => {
     !sale_price.value ||
     !stock.value ||
     !trademark.value ||
-    !category_Type.value
+    !category.value
   ) {
     Swal.fire({
       icon: 'error',
       title: 'Oops...',
       text: 'Todos los campos son obligatorios!',
       confirmButtonText: 'Entendido',
-      confirmButtonColor: '#DC2626'
+      confirmButtonColor: '#001b76'
     })
     throw new Error('Todos los campos son obligatorios.')
   }
@@ -164,7 +164,7 @@ const submitForm = async () => {
       title: 'Oops...',
       text: 'Los precios y el stock deben ser números enteros!',
       confirmButtonText: 'Entendido',
-      confirmButtonColor: '#DC2626'
+      confirmButtonColor: '#001b76'
     })
     throw new Error('Los precios y el stock deben ser números enteros.')
   }
@@ -175,7 +175,7 @@ const submitForm = async () => {
       title: 'Oops...',
       text: 'Los precios y el stock no pueden ser negativos!',
       confirmButtonText: 'Entendido',
-      confirmButtonColor: '#DC2626'
+      confirmButtonColor: '#001b76'
     })
     throw new Error('Los precios y el stock no pueden ser negativos.')
   }
@@ -191,7 +191,7 @@ const submitForm = async () => {
       sale_price: sale_price.value,
       stock: stock.value,
       trademark: trademark.value,
-      category_Type: category_Type.value
+      category_Type: category.value
     })
   })
   if (response.ok) {
@@ -200,7 +200,7 @@ const submitForm = async () => {
     sale_price.value = null
     stock.value = null
     trademark.value = ''
-    category_Type.value = ''
+    category.value = ''
     errorMessage.value = ''
     closeForm()
     Swal.fire({

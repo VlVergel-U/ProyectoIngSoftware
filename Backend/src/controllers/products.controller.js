@@ -49,16 +49,24 @@ export const getProduct = async (req, res) => {
     try {
         const product = await products.findOne({
             where: { id },
+            attributes: {
+                exclude: ['category_Type']
+            },
+            include: {
+                model: category,
+                attributes: ['Trademark']
+            }
         });
         res.json(product);
     } catch (error) {
-        return res.status(500).json({ message: error.nessage });
+        return res.status(500).json({ message: error.message });
     }
 };
 
+
 export const updateProduct = async (req, res) => {
     const { id } = req.params;
-    const { name, shopping_price, sale_price, stock, trademark } = req.body;
+    const { name, shopping_price, sale_price, stock, trademark, category_Type } = req.body;
     try {
         const product = await products.findOne({
             where:{
@@ -73,6 +81,7 @@ export const updateProduct = async (req, res) => {
         product.sale_price = sale_price ?? product.sale_price;
         product.stock = stock ?? product.stock;
         product.trademark = trademark ?? product.trademark;
+        product.category_Type = category_Type ?? product.category_Type;
 
     await product.save();
     res.json({ message: 'Product actualizado ', product });

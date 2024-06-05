@@ -1,13 +1,13 @@
 <template>
-  <div class="">
-    <div class="flex flex-col mt-4 ml-6">
+  <div class="h-screen sm:w-[550px] lg:w-auto">
+    <div class="flex flex-col mt-4 ml-6 w-auto overflow-hidden">
       <p class="text-start font-semibold text-2xl mb-6 mt-2" :class="{ 'text-white': !darkMode }">
         Inventario de Productos
       </p>
-      <button class="flex items-center w-48" @click="showAddProductForm = !showAddProductForm">
+      <button class="flex items-center w-auto" @click="showAddProductForm = !showAddProductForm">
         <div
-          class="flex items-center justify-center w-8 h-8 bg-red-600 rounded-full mr-2"
-          :class="{ 'bg-red-800': !darkMode }"
+          class="flex items-center justify-center w-8 h-8 bg-primary rounded-full mr-2"
+          :class="{ 'bg-dark-primary': !darkMode }"
         >
           <i class="fas fa-plus text-white"></i>
         </div>
@@ -18,27 +18,27 @@
         <input
           v-model="identifier"
           type="text"
-          placeholder="Ingresa el nombre del producto"
+          placeholder="Ingresa el id o nombre del producto"
           class="border border-gray-300 rounded-l-md px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 w-96"
           :class="{ 'bg-zinc-700 text-white': !darkMode }"
         />
         <button
-          class="bg-red-600 text-white px-4 py-2 rounded-r-md font-normal"
-          :class="{ 'bg-red-800': !darkMode }"
+          class="bg-primary text-white px-4 py-2 rounded-r-md font-normal"
+          :class="{ 'bg-dark-primary': !darkMode }"
           @click="getProduct"
         >
           Buscar
         </button>
         <button
-          class="bg-red-600 text-white px-4 py-2 rounded font-normal ml-8"
-          :class="{ 'bg-red-800': !darkMode }"
+          class="bg-primary text-white px-4 py-2 rounded font-normal ml-2 w-auto"
+          :class="{ 'bg-dark-primary': !darkMode }"
           @click="getProducts"
         >
           Ver todos los productos
         </button>
         <button
-          class="bg-red-600 text-white px-4 py-2 rounded font-normal ml-8"
-          :class="{ 'bg-red-800': !darkMode }"
+          class="bg-primary text-white px-4 py-2 rounded font-normal ml-2 w-auto"
+          :class="{ 'bg-dark-primary': !darkMode }"
           @click="exportToExcel"
         >
           Exportar a Excel
@@ -52,7 +52,7 @@
       @product-added="getProducts"
     ></add-product-page>
 
-    <div class="overflow-x-auto h-96">
+    <div class="overflow-x-auto w-auto sm:h-56 lg:h-auto">
       <table
         ref="productsTable"
         class="min-w-full divide-y divide-gray-200"
@@ -188,35 +188,39 @@
             </td>
 
             <td class="px-6 py-3 text-center whitespace-nowrap select-none">
-              <template v-if="!product.editMode">{{ product.category_Type }}</template>
-              <input
+              <template v-if="!product.editMode">{{ product.category.Trademark }}</template>
+              <select
                 v-else
                 v-model="product.editableCategoryType"
-                type="text"
                 class="w-full border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
                 :class="{ 'bg-zinc-800': !darkMode }"
-              />
+              >
+                <option value="1">Manijas</option>
+                <option value="2">Cauchos</option>
+                <option value="3">Pines</option>
+              </select>
             </td>
 
             <td class="px-6 py-3 text-center whitespace-nowrap">
               <button
                 v-if="!product.editMode"
-                class="bg-zinc-500 hover:bg-zinc-600 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                :class="{ 'bg-gray-800': !darkMode }"
+                class="bg-yellow-500 hover:bg-yellow-400 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                :class="{ 'bg-yellow-600': !darkMode }"
                 @click="enableEditMode(product)"
               >
                 Modificar
               </button>
               <button
                 v-else
-                class="bg-zinc-900 hover:bg-zinc-950 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-6"
+                class="bg-green-500 hover:bg-green-400 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-6"
+                :class="{ 'bg-green-600': !darkMode }"
                 @click="saveChanges(product)"
               >
                 Guardar
               </button>
               <button
                 v-if="product.editMode"
-                class="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                class="border border-gray-500 hover:text-gray-700 text-gray-600 py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 @click="cancelEdit(product)"
               >
                 Cancelar
@@ -249,6 +253,10 @@ const identifier = ref('')
 const products = ref([])
 const showAddProductForm = ref(false)
 
+function sortTableById() {
+  products.value.sort((a, b) => a.id - b.id)
+}
+
 const enableEditMode = (product) => {
   product.editMode = true
   product.editableId = product.id
@@ -266,7 +274,7 @@ const saveChanges = (product) => {
     text: 'No se podrán deshacer los cambios realizados',
     icon: 'question',
     showCancelButton: true,
-    confirmButtonColor: '#DC2626',
+    confirmButtonColor: '#d8a507',
     cancelButtonColor: '#808080',
     confirmButtonText: 'Sí, modificar',
     cancelButtonText: 'Cancelar'
@@ -290,8 +298,10 @@ const saveChanges = (product) => {
           title: 'Modificado!',
           text: '',
           icon: 'success',
-          confirmButtonColor: '#DC2626'
+          confirmButtonColor: '#4ade80'
         })
+        getProducts()
+        sortTableById()
       } catch (error) {
         console.error('Error al actualizar producto:', error)
         let errorMessage =
@@ -341,13 +351,21 @@ async function getProduct() {
         title: 'Producto no encontrado',
         text: '¿Estás seguro de haber ingresado todos los valores de búsqueda correctamente?',
         icon: 'question',
-        confirmButtonColor: '#DC2626'
+        confirmButtonColor: '#001b76'
       })
+      identifier.value = ''
       throw new Error('No se encontraron resultados para la búsqueda')
     }
     products.value = [data]
     identifier.value = ''
   } catch (error) {
+    identifier.value = ''
+    Swal.fire({
+      title: 'Error en el ID del Producto',
+      text: 'Por favor, ingresa valores numéricos para el ID del producto.',
+      icon: 'error',
+      confirmButtonColor: '#001b76'
+    })
     console.error('Error al obtener producto:', error)
   }
 }

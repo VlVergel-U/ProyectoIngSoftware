@@ -5,10 +5,10 @@
         class="overflow-hidden font-sans h-screen flex items-center justify-center absolute inset-0 bg-opacity-50 backdrop-blur-[2px] z-0"
       >
         <div
-          class="absolute bg-white rounded-full w-32 h-32 justify-center items-center flex border-2 border-black"
+          class="absolute bg-primary rounded-full w-32 h-32 justify-center items-center flex border-2 border-black"
           style="margin-bottom: 460px"
         >
-          <img src="../../assets/icon.png" alt="IMG" class="w-28 h-10" />
+          <img src="../../assets/icon_white.png" alt="IMG" class="w-30 h-14" />
         </div>
 
         <div
@@ -20,10 +20,10 @@
             {{ mensajeTexto }}
           </p>
           <div
-            class="w-4 h-4 bg-red-600 flex items-center justify-center rounded-md absolute right-2 -translate-y-3 border border-red-950"
+            class="w-4 h-4 bg-primary flex items-center justify-center rounded-md absolute right-2 -translate-y-3 border border-zinc-600"
           >
             <span
-              class="material-symbols-outlined text-red-950 text-xl select-none cursor-pointer"
+              class="material-symbols-outlined text-zinc-400 text-sm select-none cursor-pointer"
               @click="mensaje = !mensaje"
               >close</span
             >
@@ -77,13 +77,13 @@
           <div class="flex justify-center">
             <button
               type="submit"
-              class="w-72 h-12 bg-red-700 text-white font-semibold rounded-3xl transition duration-300 hover:bg-red-600 my-4"
+              class="w-72 h-12 bg-primary text-white font-semibold rounded-3xl transition duration-300 hover:bg-primary-hover my-4"
             >
               Iniciar sesión
             </button>
           </div>
           <a
-            class="flex justify-center text-red-400 font-semibold cursor-pointer select-none"
+            class="flex justify-center text-primary-hover font-semibold cursor-pointer select-none"
             @click="goToRegister"
             >Registrar usuario</a
           >

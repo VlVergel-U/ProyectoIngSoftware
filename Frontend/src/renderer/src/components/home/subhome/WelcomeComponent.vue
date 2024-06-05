@@ -1,54 +1,137 @@
 <template>
-  <div class="w-full max-w-md mx-auto">
-    <Bar :data="chartData" :options="chartOptions" />
+  <div class="h-screen sm:w-[550px] lg:w-auto p-4">
+    <p class="text-start font-bold text-2xl mb-6 mt-2 ml-4" :class="{ 'text-white': darkMode }">
+      Inicio
+    </p>
+    <!-- Mensaje de Bienvenida -->
+    <div class="w-full p-4">
+      <div class="bg-blue-100 rounded-lg shadow-md p-4">
+        <p class="text-xl font-bold">¡Bienvenido, Usuario!</p>
+        <p class="text-md">Aquí puedes ver un resumen de tu actividad reciente y otros detalles importantes.</p>
+      </div>
+    </div>
+
+        <!-- Resumen Diario -->
+        <div class="w-full p-4">
+      <div class="bg-green-100 rounded-lg shadow-md p-4">
+        <p class="text-lg font-bold">Resumen Diario</p>
+        <p class="text-md">Hoy has vendido un total de {{ dailySales }} productos, generando ingresos de ${{ dailyRevenue }}.</p>
+      </div>
+    </div>
+
+    
+    <div class="flex flex-wrap justify-center">
+      <!-- Widget de Productos -->
+      <div class="w-full md:w-1/2 xl:w-1/4 p-4">
+        <div class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300">
+          <div class="flex items-center mb-2">
+            <i class="fas fa-boxes text-xl mr-2"></i>
+            <p class="text-lg font-bold">Productos</p>
+          </div>
+          <ul class="overflow-y-auto h-48">
+            <li v-for="item in widgets[0].data" :key="item.id" class="py-2 border-b border-gray-200">
+              {{ item.id }} - {{ item.name }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Widget de Ventas -->
+      <div class="w-full md:w-1/2 xl:w-1/4 p-4">
+        <div class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300">
+          <div class="flex items-center mb-2">
+            <i class="fas fa-chart-line text-xl mr-2"></i>
+            <p class="text-lg font-bold">Ventas</p>
+          </div>
+          <ul class="overflow-y-auto h-48">
+            <li v-for="item in widgets[1].data" :key="item.id" class="py-2 border-b border-gray-200">
+              {{ item.id }} - {{ item.date }} - {{ item.buyer }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Widget de Stock -->
+      <div class="w-full md:w-1/2 xl:w-1/4 p-4">
+        <div class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300">
+          <div class="flex items-center mb-2">
+            <i class="fas fa-warehouse text-xl mr-2"></i>
+            <p class="text-lg font-bold">Stock</p>
+          </div>
+          <p class="text-lg">Total productos: {{ totalStock }}</p>
+          <div class="mt-4">
+            <p class="text-md font-semibold">Progreso:</p>
+            <div class="relative pt-1">
+              <div class="flex mb-2 items-center justify-between">
+                <div class="text-right">
+                  <span class="text-xs font-semibold inline-block text-teal-600">
+                    {{ totalStock }} / 1000
+                  </span>
+                </div>
+              </div>
+              <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-teal-200">
+                <div style="width:{{ (totalStock / 1000) * 100 }}%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-teal-500"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Widget de Facturas -->
+      <div class="w-full md:w-1/2 xl:w-1/4 p-4">
+        <div class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300">
+          <div class="flex items-center mb-2">
+            <i class="fas fa-file-invoice text-xl mr-2"></i>
+            <p class="text-lg font-bold">Facturas</p>
+          </div>
+          <ul class="overflow-y-auto h-48">
+            <li v-for="item in widgets[3].data" :key="item.id" class="py-2 border-b border-gray-200">
+              {{ item.id }} - {{ item.date }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { Bar } from 'vue-chartjs';
-import { Chart, registerables } from 'chart.js';
-import axios from 'axios';
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 
-Chart.register(...registerables);
+const widgets = ref([
+  { title: 'Productos', type: 'list', data: [] },
+  { title: 'Ventas', type: 'list', data: [] },
+  { title: 'Stock', type: 'text', data: 0 },
+  { title: 'Facturas', type: 'list', data: [] }
+])
 
-const chartData = ref({
-  labels: [],
-  datasets: [
-{
-      label: 'Cantidad',
-      backgroundColor: '#1c64f2',
-      data: [],
-    },
-  ],
-});
+const totalStock = ref(0)
 
-const chartOptions = ref({
-  responsive: true,
-  maintainAspectRatio: false,
-});
-
-const fetchData = async () => {
+onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:3000/viewProduct');
-    const products = response.data;
-    const categories = [...new Set(products.map(product => product.category_Type))];
-    const quantities = categories.map(category => {
-      return products.filter(product => product.category_Type === category).length;
-    });
+    const responses = await Promise.all([
+      axios.get('http://localhost:3000/viewProduct').catch((error) => {
+        console.error('Error fetching products:', error)
+        return { data: [] }
+      }),
+      axios.get('http://localhost:3000/sales').catch((error) => {
+        console.error('Error fetching sales:', error)
+        return { data: [] }
+      }),
+      axios.get('http://localhost:3000/invoices').catch((error) => {
+        console.error('Error fetching invoices:', error)
+        return { data: [] }
+      })
+    ])
 
-    chartData.value.labels = categories;
-    chartData.value.datasets[0].label = 'Cantidad'; 
-    chartData.value.datasets[0].data = quantities;
+    widgets.value[0].data = responses[0].data
+    totalStock.value = responses[0].data.reduce((acc, product) => acc + product.stock, 0)
+
+    widgets.value[1].data = responses[1].data
+    widgets.value[3].data = responses[2].data
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error(error)
   }
-};
-
-onMounted(() => {
-  fetchData();
-});
+})
 </script>
-
-<style scoped>
-</style>
