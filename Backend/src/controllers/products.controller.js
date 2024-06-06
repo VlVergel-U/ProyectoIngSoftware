@@ -44,19 +44,40 @@ export const createProducts = async (req, res) => {
 };
 
 export const getProduct = async (req, res) => {
-    const { id } = req.params;
+    const { id, name } = req.params;
+    let product;
 
     try {
-        const product = await products.findOne({
-            where: { id },
-            attributes: {
-                exclude: ['category_Type']
-            },
-            include: {
-                model: category,
-                attributes: ['Trademark']
-            }
-        });
+        if (id) {
+            
+            product = await products.findOne({
+                where: { id },
+                attributes: {
+                    exclude: ['category_Type']
+                },
+                include: {
+                    model: category,
+                    attributes: ['Trademark']
+                }
+            });
+        } else if (name) {
+            
+            product = await products.findOne({
+                where: { name },
+                attributes: {
+                    exclude: ['category_Type']
+                },
+                include: {
+                    model: category,
+                    attributes: ['Trademark']
+                }
+            });
+        }
+
+        if (!product) {
+            return res.status(404).json({ message: "Producto no encontrado" });
+        }
+
         res.json(product);
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -74,7 +95,7 @@ export const updateProduct = async (req, res) => {
             }
         })
         if (!product) {
-            return res.status(404).json({ message: 'Product noo existe' });
+            return res.status(404).json({ message: 'Product no existe' });
         }
         product.name = name ?? product.name;
         product.shopping_price = shopping_price ?? product.shopping_price;
