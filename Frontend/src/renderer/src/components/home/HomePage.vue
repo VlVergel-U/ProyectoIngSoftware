@@ -34,29 +34,21 @@
           :class="{ 'bg-zinc-900': componenteSeleccionado === 2 }"
           @click="mostrarComponente(2)"
         >
-          <span class="material-symbols-outlined ml-4 text-gray-400">receipt_long</span>
-          <p class="ml-4 text-gray-400 font-semibold">Facturación</p>
+          <span class="material-symbols-outlined ml-4 text-gray-400">person</span>
+          <p class="ml-4 text-gray-400 font-semibold">Clientes</p>
         </div>
         <div
           class="w-full bg-transparent h-16 flex items-center rounded-md hover:bg-zinc-700 select-none cursor-pointer mt-2"
           :class="{ 'bg-zinc-900': componenteSeleccionado === 3 }"
           @click="mostrarComponente(3)"
         >
-          <span class="material-symbols-outlined ml-4 text-gray-400">person</span>
-          <p class="ml-4 text-gray-400 font-semibold">Clientes</p>
-        </div>
-        <div
-          class="w-full bg-transparent h-16 flex items-center rounded-md hover:bg-zinc-700 select-none cursor-pointer mt-2"
-          :class="{ 'bg-zinc-900': componenteSeleccionado === 4 }"
-          @click="mostrarComponente(4)"
-        >
           <span class="material-symbols-outlined ml-4 text-gray-400">storefront</span>
           <p class="ml-4 text-gray-400 font-semibold">Ventas</p>
         </div>
         <div
           class="w-full bg-transparent h-16 flex items-center rounded-md hover:bg-zinc-700 select-none cursor-pointer mt-2"
-          :class="{ 'bg-zinc-900': componenteSeleccionado === 5 }"
-          @click="mostrarComponente(5)"
+          :class="{ 'bg-zinc-900': componenteSeleccionado === 4 }"
+          @click="mostrarComponente(4)"
         >
           <span class="material-symbols-outlined ml-4 text-gray-400">info</span>
           <p class="ml-4 text-gray-400 font-semibold">Info</p>
@@ -122,7 +114,6 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import InventoryPageVue from './subhome/InventoryPage.vue'
 import WelcomeComponentVue from './subhome/WelcomeComponent.vue'
-import BillingPage from './subhome/BillingPage.vue'
 import CustomerPage from './subhome/CustomerPage.vue'
 import SellPage from './subhome/SellPage.vue'
 import InfoComponent from './subhome/InfoComponent.vue'
@@ -131,11 +122,10 @@ import InfoComponent from './subhome/InfoComponent.vue'
 const store = useStore()
 const router = useRouter()
 const darkMode = computed(() => store.state.darkMode)
-const mostrar = ref([true, false, false, false, false, false])
+const mostrar = ref([true, false, false, false, false])
 const componentes = ref([
   WelcomeComponentVue,
   InventoryPageVue,
-  BillingPage,
   CustomerPage,
   SellPage,
   InfoComponent

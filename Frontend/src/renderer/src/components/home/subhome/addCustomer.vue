@@ -24,18 +24,36 @@
           class="text-2xl font-semibold mb-4 pt-8 text-center"
           :class="{ 'text-gray-800': darkMode, 'text-gray-100': !darkMode }"
         >
-          Agregar Producto
+          Agregar Cliente
         </h2>
         <form class="px-10 py-4" @submit.prevent="submitForm">
+          <div class="mb-4 text-left">
+            <label
+              for="document"
+              class="block text-sm font-medium"
+              :class="{ 'text-gray-800': darkMode, 'text-gray-100': !darkMode }"
+              >
+              Documento <span class="text-red-600">*</span>
+              </label
+            >
+            <input
+              id="document"
+              v-model="document"
+              type="text"
+              name="document"
+              class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
+              :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
+            />
+          </div>
           <div class="mb-4 text-left">
             <label
               for="name"
               class="block text-sm font-medium"
               :class="{ 'text-gray-800': darkMode, 'text-gray-100': !darkMode }"
+              >
+              Nombres <span class="text-red-600">*</span>
+              </label
             >
-              Nombre <span class="text-red-600">*</span>
-            </label>
-
             <input
               id="name"
               v-model="name"
@@ -47,98 +65,75 @@
           </div>
           <div class="mb-4 text-left">
             <label
-              for="shopping_price"
-              class="block text-sm font-medium"
-              :class="{ 'text-gray-800': darkMode, 'text-gray-100': !darkMode }"
-            >
-              Precio de compra <span class="text-red-600">*</span>
-            </label>
-            <input
-              id="shopping_price"
-              v-model="shopping_price"
-              type="number"
-              name="shopping_price"
-              step="0.01"
-              class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
-              :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
-            />
-          </div>
-          <div class="mb-4 text-left">
-            <label
-              for="sale_price"
+              for="last_name"
               class="block text-sm font-medium"
               :class="{ 'text-gray-800': darkMode, 'text-gray-100': !darkMode }"
               >
-              Precio de venta <span class="text-red-600">*</span>
+              Apellidos <span class="text-red-600">*</span>
               </label
             >
             <input
-              id="sale_price"
-              v-model="sale_price"
-              type="number"
-              name="sale_price"
-              step="0.01"
-              class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
-              :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
-            />
-          </div>
-          <div class="mb-4 text-left">
-            <label
-              for="stock"
-              class="block text-sm font-medium"
-              :class="{ 'text-gray-800': darkMode, 'text-gray-100': !darkMode }"
-              >
-              Precio de venta <span class="text-red-600">*</span>
-              </label
-            >
-            <input
-              id="stock"
-              v-model="stock"
-              type="number"
-              name="stock"
-              class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
-              :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
-            />
-          </div>
-          <div class="mb-4 text-left">
-            <label
-              for="trademark"
-              class="block text-sm font-medium"
-              :class="{ 'text-gray-800': darkMode, 'text-gray-100': !darkMode }"
-              >
-              Stock <span class="text-red-600">*</span>
-              </label
-            >
-            <input
-              id="trademark"
-              v-model="trademark"
+              id="last_name"
+              v-model="last_name"
               type="text"
-              name="trademark"
+              name="last_name"
+              class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
+              :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
+            />
+          </div>
+          <div class="mb-4 text-left">
+            <label
+              for="addres"
+              class="block text-sm font-medium"
+              :class="{ 'text-gray-800': darkMode, 'text-gray-100': !darkMode }"
+              >
+              Dirección <span class="text-red-600">*</span>
+              </label
+            >
+            <input
+              id="address"
+              v-model="addres"
+              type="text"
+              name="addres"
+              class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
+              :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
+            />
+          </div>
+          <div class="mb-4 text-left">
+            <label
+              for="phone"
+              class="block text-sm font-medium"
+              :class="{ 'text-gray-800': darkMode, 'text-gray-100': !darkMode }"
+              >
+              Celular <span class="text-red-600">*</span>
+              </label
+            >
+            <input
+              id="phone"
+              v-model="phone"
+              type="text"
+              name="phone"
               class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
               :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
             />
           </div>
           <div class="mb-4 text-left pb-4">
             <label
-              for="category"
+              for="email"
               class="block text-sm font-medium"
               :class="{ 'text-gray-800': darkMode, 'text-gray-100': !darkMode }"
               >
-              Categoría <span class="text-red-600">*</span>
+              Email <span class="text-red-600">*</span>
               </label
             >
-            <select
-              id="category"
-              v-model="category"
-              name="category"
-              class="mt-1 block w-full border border-gray-200 h-8 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
+            <input
+              id="email"
+              v-model="email"
+              type="email"
+              name="email"
+              class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
               :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
-            >
-              <option value="" disabled selected style="color: gray">Selecciona categoría</option>
-              <option value="1">Manijas</option>
-              <option value="2">Cauchos</option>
-              <option value="3">Pines</option>
-            </select>
+            />
           </div>
           <div class="flex justify-center">
             <button type="submit" class="text-white px-4 py-2 rounded font-semibold bg-primary">
@@ -165,15 +160,15 @@ import { useStore } from 'vuex'
 import Swal from 'sweetalert2'
 import { defineEmits } from 'vue'
 
-const emit = defineEmits(['close-form', 'product-added'])
+const emit = defineEmits(['close-form', 'customer-added'])
 const store = useStore()
 const darkMode = computed(() => store.state.darkMode)
+const document = ref('')
 const name = ref('')
-const shopping_price = ref(null)
-const sale_price = ref(null)
-const stock = ref(null)
-const trademark = ref('')
-const category = ref('')
+const last_name = ref('')
+const addres = ref('')
+const phone = ref('')
+const email = ref('')
 const errorMessage = ref('')
 
 const closeForm = () => {
@@ -184,12 +179,12 @@ const submitForm = async () => {
   errorMessage.value = ''
 
   if (
+    !document.value ||
     !name.value ||
-    !shopping_price.value ||
-    !sale_price.value ||
-    !stock.value ||
-    !trademark.value ||
-    !category.value
+    !last_name.value ||
+    !addres.value ||
+    !phone.value ||
+    !email.value
   ) {
     Swal.fire({
       icon: 'error',
@@ -201,61 +196,35 @@ const submitForm = async () => {
     throw new Error('Todos los campos son obligatorios.')
   }
 
-  if (
-    !Number.isInteger(shopping_price.value) ||
-    !Number.isInteger(sale_price.value) ||
-    !Number.isInteger(stock.value)
-  ) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: 'Los precios y el stock deben ser números enteros!',
-      confirmButtonText: 'Entendido',
-      confirmButtonColor: '#001b76'
-    })
-    throw new Error('Los precios y el stock deben ser números enteros.')
-  }
-
-  if (shopping_price.value < 0 || sale_price.value < 0 || stock.value < 0) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: 'Los precios y el stock no pueden ser negativos!',
-      confirmButtonText: 'Entendido',
-      confirmButtonColor: '#001b76'
-    })
-    throw new Error('Los precios y el stock no pueden ser negativos.')
-  }
-
-  const response = await fetch('http://localhost:3000/addProduct', {
+  const response = await fetch('http://localhost:3000/addCustomer', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
+      document: document.value,
       name: name.value,
-      shopping_price: shopping_price.value,
-      sale_price: sale_price.value,
-      stock: stock.value,
-      trademark: trademark.value,
-      category_Type: category.value
+      last_name: last_name.value,
+      addres: addres.value,
+      phone: phone.value,
+      email: email.value
     })
   })
   if (response.ok) {
+    document.value = ''
     name.value = ''
-    shopping_price.value = null
-    sale_price.value = null
-    stock.value = null
-    trademark.value = ''
-    category.value = ''
+    last_name.value = ''
+    addres.value = ''
+    phone.value = ''
+    email.value = ''
     errorMessage.value = ''
     closeForm()
     Swal.fire({
       title: 'Bien!',
-      text: 'Producto agregado exitosamente!',
+      text: 'Cliente agregado exitosamente!',
       icon: 'success'
     })
-    emit('product-added')
+    emit('customer-added')
   } else {
     throw new Error('Error en la solicitud.')
   }

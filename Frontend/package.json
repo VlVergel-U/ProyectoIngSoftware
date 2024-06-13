@@ -25,6 +25,7 @@
     "axios": "^1.6.8",
     "chart.js": "^4.4.3",
     "exceljs": "^4.4.0",
+    "jspdf": "^2.5.1",
     "material-icons": "^1.13.12",
     "sweetalert2": "^11.11.0",
     "vue-chartjs": "^5.3.1",

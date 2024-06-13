@@ -6,7 +6,7 @@
       </p>
       <button class="flex items-center w-auto" @click="showAddProductForm = !showAddProductForm">
         <div
-          class="flex items-center justify-center w-8 h-8 bg-primary rounded-full mr-2"
+          class="flex items-center justify-center w-8 h-8 bg-primary rounded-full mr-2 hover:bg-primary-hover"
           :class="{ 'bg-dark-primary': !darkMode }"
         >
           <i class="fas fa-plus text-white"></i>
@@ -15,33 +15,38 @@
       </button>
 
       <div class="flex items-center mt-4 mb-4">
-        <input
-          v-model="identifier"
-          type="text"
-          placeholder="Ingresa el id o nombre del producto"
-          class="border border-gray-300 rounded-l-md px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 w-96"
-          :class="{ 'bg-zinc-700 text-white': !darkMode }"
-        />
+        <div class="flex items-center w-auto justify-center text-center">
+          <input
+            v-model="identifier"
+            type="text"
+            placeholder="Buscar por id o nombre"
+            class="border border-gray-300 rounded-l-md px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 w-60 h-10"
+            :class="{ 'bg-zinc-700 text-white': !darkMode, 'pr-8': close }"
+            @input="close = true"
+          />
+          <span
+            v-if="identifier !== ''"
+            class="material-symbols-outlined absolute ml-36 cursor-pointer text-gray-600"
+            @click="clean"
+          >
+            close
+          </span>
+          <button
+            class="bg-primary text-white px-4 py-2 rounded-r-md font-normal h-10 hover:bg-primary-hover"
+            :class="{ 'bg-dark-primary': !darkMode }"
+            @click="getProduct"
+          >
+            <span class="material-symbols-outlined text-xl cursor-pointer">search</span>
+          </button>
+        </div>
+
         <button
-          class="bg-primary text-white px-4 py-2 rounded-r-md font-normal"
-          :class="{ 'bg-dark-primary': !darkMode }"
-          @click="getProduct"
-        >
-          Buscar
-        </button>
-        <button
-          class="bg-primary text-white px-4 py-2 rounded font-normal ml-2 w-auto"
-          :class="{ 'bg-dark-primary': !darkMode }"
-          @click="getProducts"
-        >
-          Ver todos los productos
-        </button>
-        <button
-          class="bg-primary text-white px-4 py-2 rounded font-normal ml-2 w-auto"
+          class="bg-primary text-white px-4 py-2 rounded font-normal ml-2 w-auto flex hover:bg-primary-hover"
           :class="{ 'bg-dark-primary': !darkMode }"
           @click="exportToExcel"
         >
-          Exportar a Excel
+          <img src="../../../assets/excel.png" alt="" class="w-6 h-6" />
+          <p class="ml-2">Exportar a Excel</p>
         </button>
       </div>
     </div>
@@ -204,11 +209,10 @@
             <td class="px-6 py-3 text-center whitespace-nowrap">
               <button
                 v-if="!product.editMode"
-                class="bg-yellow-500 hover:bg-yellow-400 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                :class="{ 'bg-yellow-600': !darkMode }"
+                class=" text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 @click="enableEditMode(product)"
               >
-                Modificar
+                <span class="material-symbols-outlined flex text-yellow-500 font-semibold hover:text-yellow-400" :class="{ 'text-yellow-600': !darkMode }">  edit_square </span>
               </button>
               <button
                 v-else
@@ -245,10 +249,10 @@ onMounted(() => {
   getProducts()
 })
 
+const productsTable = ref(null);
 const store = useStore()
-
 const darkMode = computed(() => store.state.darkMode)
-
+let close = ref(false)
 const identifier = ref('')
 const products = ref([])
 const showAddProductForm = ref(false)
@@ -339,9 +343,23 @@ function cancel() {
   showAddProductForm.value = false
 }
 
+const clean = () => {
+  close.value = false
+  identifier.value = ''
+  getProducts()
+}
+
 async function getProduct() {
   try {
-    const response = await fetch(`http://localhost:3000/viewProduct/${identifier.value}`)
+    let url = ''
+    if (!isNaN(identifier.value)) {
+      // si es un número
+      url = `http://localhost:3000/viewProduct/${identifier.value}`
+    } else {
+      // si es una cadena
+      url = `http://localhost:3000/viewProduct/name/${identifier.value}`
+    }
+    const response = await fetch(url)
     if (!response.ok) {
       throw new Error('Error al obtener producto: La solicitud no pudo ser completada.')
     }
@@ -357,54 +375,54 @@ async function getProduct() {
       throw new Error('No se encontraron resultados para la búsqueda')
     }
     products.value = [data]
-    identifier.value = ''
   } catch (error) {
-    identifier.value = ''
     Swal.fire({
-      title: 'Error en el ID del Producto',
-      text: 'Por favor, ingresa valores numéricos para el ID del producto.',
+      title: 'Error al obtener el producto',
+      text: 'Por favor, rectifica los valores de búsqueda ingresados',
       icon: 'error',
       confirmButtonColor: '#001b76'
     })
     console.error('Error al obtener producto:', error)
+    identifier.value = ''
   }
 }
 
 function exportToExcel() {
-  const table = this.$refs.studentsTable
-  const columnsToSave = 10
-  const tableData = Array.prototype.map.call(table.rows, (row) => {
-    return Array.prototype.slice.call(row.cells, 0, columnsToSave).map((cell) => cell.innerHTML)
-  })
+  const table = productsTable.value;
 
-  const workbook = new ExcelJS.Workbook()
-  const worksheet = workbook.addWorksheet('Students')
+  const columnsToSave = 7;
+  const tableData = Array.prototype.map.call(table.rows, (row) => {
+    return Array.prototype.slice.call(row.cells, 0, columnsToSave).map((cell) => cell.innerHTML);
+  });
+
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('Products');
 
   tableData.forEach((rowData) => {
-    worksheet.addRow(rowData)
-  })
+    worksheet.addRow(rowData);
+  });
 
   worksheet.columns.forEach((column) => {
-    let maxLength = 0
+    let maxLength = 0;
     column.eachCell({ includeEmpty: true }, (cell) => {
-      const columnLength = cell.value ? cell.value.toString().length : 10
+      const columnLength = cell.value ? cell.value.toString().length : 10;
       if (columnLength > maxLength) {
-        maxLength = columnLength
+        maxLength = columnLength;
       }
-    })
-    column.width = maxLength < 10 ? 10 : maxLength
-  })
+    });
+    column.width = maxLength < 10 ? 10 : maxLength;
+  });
 
   workbook.xlsx.writeBuffer().then((buffer) => {
     const blob = new Blob([buffer], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    })
-    const link = document.createElement('a')
-    link.href = URL.createObjectURL(blob)
-    link.download = 'Estudiantes.xlsx'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  })
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'Productos.xlsx';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
 }
 </script>
