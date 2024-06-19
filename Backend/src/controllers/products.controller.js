@@ -1,5 +1,6 @@
 import { products } from "../models/products.js";
 import {category } from "../models/category.js"
+import { Op } from "sequelize";
 
 export const getProducts = async (req, res) => {
     try {
@@ -44,12 +45,21 @@ export const createProducts = async (req, res) => {
 };
 
 export const getProduct = async (req, res) => {
-    const { id } = req.params;
-
+    const { id, name  } = req.params;
+    let product;
     try {
-        const product = await products.findOne({
-            where: { id },
-        });
+        if(id){
+            product = await products.findOne({
+                where: { id },
+            });
+        }else if(name){
+            product= await products.findOne({
+                where:{
+                    [Op.like]: `%${name}%`,
+                }
+            })
+        }
+        
         res.json(product);
     } catch (error) {
         return res.status(500).json({ message: error.nessage });
