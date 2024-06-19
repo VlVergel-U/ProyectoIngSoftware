@@ -1,4 +1,5 @@
 import { customers } from "../models/customer.js";
+import { Op } from "sequelize";
 
 export const getCustomers = async (req, res) => {
   try {
@@ -12,15 +13,14 @@ export const getCustomers = async (req, res) => {
 export const createCustomers = async (req, res) => {
   try {
     console.log(req.body);
-    const {document, name, last_name, addres, phone, email } =
-      req.body;
+    const { document, name, last_name, addres, phone, email } = req.body;
     const newCustomer = await customers.create({
       document,
       name,
       last_name,
       addres,
       phone,
-      email
+      email,
     });
     res.json(newCustomer);
   } catch (error) {
@@ -33,12 +33,16 @@ export const getCustomer = async (req, res) => {
   let customer;
   try {
     if (id_customer) {
-      customer = await customers.findOne({
+      customer = await customers.findAll({
         where: { id_customer },
       });
     } else if (document) {
-      customer = await customers.findOne({
-        where: { document },
+      customer = await customers.findAll({
+        where: {
+          document: {
+            [Op.like]: `%${document}%`,
+          },
+        },
       });
     }
 

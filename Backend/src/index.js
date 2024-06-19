@@ -1,6 +1,6 @@
 import server from "./app.js";
 import { sequelize } from "./database/database.js";
-import {detail}  from "./models/detail.js";
+
 
 
 import { createCategory, createAdmin } from "./libs/initialSetUp.js";
