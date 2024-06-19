@@ -57,7 +57,7 @@ export const getCustomer = async (req, res) => {
 
 export const updateCustomer = async (req, res) => {
   const { id_customer } = req.params;
-  const { name, phone, email } = re.body;
+  const { addres, phone, email } = req.body;
   try {
     const customer = await customers.findOne({
       where: {
@@ -67,9 +67,11 @@ export const updateCustomer = async (req, res) => {
     if (!customer) {
       return res.status(404).json({ message: "customer no existe" });
     }
-    customer.addres = name ?? customer.addres;
+    customer.addres = addres ?? customer.addres;
     customer.phone = phone ?? customer.phone;
     customer.email = email ?? customer.email;
+    await customer.save();
+    res.status(200).json({ message: "customer actualizado" });
   } catch (error) {
     return res.status(500).json({ message: error.nessage });
   }

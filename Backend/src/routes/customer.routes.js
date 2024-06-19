@@ -10,7 +10,7 @@ const router = Router();
 
 router.get("/viewCustomer", getCustomers);
 router.post("/addCustomer", createCustomers);
-router.put("/updateCustomer/id",updateCustomer);
+router.put("/updateCustomer/:id_customer",updateCustomer);
 router.delete("/deleteCustomer/id");
 router.get("/viewCustomer/:id_customer",getCustomer);
 router.get("/viewCustomer/document/:document", getCustomer)
