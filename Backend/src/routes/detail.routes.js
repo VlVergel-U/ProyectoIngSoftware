@@ -8,5 +8,6 @@ router.post("/addDetail",)
 router.put("/updateDetail/:id",)
 router.delete("/deleteDetail/id",)
 router.get("/viewDetail/:id", getDetail)
+router.get("/billing/:shoppingIdShopping", getBilling)
 
 export default router;

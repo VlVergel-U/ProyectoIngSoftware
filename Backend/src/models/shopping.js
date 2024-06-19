@@ -8,6 +8,7 @@ export const shopping = sequelize.define(
     id_shopping: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      autoIncrement: true,
     },
     final_price: {
       type: DataTypes.STRING(40),

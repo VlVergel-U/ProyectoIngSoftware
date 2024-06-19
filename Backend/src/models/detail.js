@@ -10,7 +10,7 @@ export const detail = sequelize.define(
       type: DataTypes.INTEGER,
     },
     price: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
     },
   },
   {

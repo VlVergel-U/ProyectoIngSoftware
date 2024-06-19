@@ -22,7 +22,7 @@ export const createShopping = async (req, res) => {
       productName,
       amount,
       price,
-      nameCustomer,
+      document,
     } = req.body;
 
     const product = await products.findOne({
@@ -45,7 +45,7 @@ export const createShopping = async (req, res) => {
 
     const customer = await customers.findOne({
       where: {
-        name: nameCustomer,
+        document,
       },
     });
 
@@ -58,12 +58,12 @@ export const createShopping = async (req, res) => {
       unit_price,
       date_shopping,
       payment_metod,
-      id_customer: customer.id,
+      id_customer: customer.id_customer,
     });
 
     const newDetail = await detail.create({
       productId: product.id,
-      shoppingIdShopping: newShopping.id,
+      shoppingIdShopping: newShopping.id_shopping,
       amount,
       price,
     });
@@ -75,7 +75,6 @@ export const createShopping = async (req, res) => {
       newDetail,
       newShopping,
     });
-
   } catch (error) {
     console.error("Error al procesar la compra:", error);
     return res.status(500).json({ message: error.message });
