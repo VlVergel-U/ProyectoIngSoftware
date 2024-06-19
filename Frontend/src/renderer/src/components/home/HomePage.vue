@@ -87,6 +87,7 @@
         <p class="text-sm text-primary font-semibold ml-2 select-none">By TeamScrum</p>
         <button
           class="mx-2 ml-auto w-24 h-8 border text-gray-400 border-gray-400 rounded-xl select-none"
+          @click="PopUp = !PopUp"
         >
           Ayuda
         </button>
@@ -103,6 +104,8 @@
           v-show="mostrar[index]"
           :key="index"
         ></component>
+        <help v-if="PopUp" @close-form="cancel"
+        ></help>
       </div>
     </div>
   </div>
@@ -117,8 +120,10 @@ import WelcomeComponentVue from './subhome/WelcomeComponent.vue'
 import CustomerPage from './subhome/CustomerPage.vue'
 import SellPage from './subhome/SellPage.vue'
 import InfoComponent from './subhome/InfoComponent.vue'
+import Help from './subhome/HelpComponent.vue'
 
 // Estado
+let PopUp = ref(false)
 const store = useStore()
 const router = useRouter()
 const darkMode = computed(() => store.state.darkMode)
@@ -169,6 +174,10 @@ const mostrarComponente = (index) => {
   mostrar.value = mostrar.value.map(() => false)
   mostrar.value[index] = true
   saveStateToLocalStorage()
+}
+
+function cancel() {
+  PopUp.value = false
 }
 
 // Ciclos de vida

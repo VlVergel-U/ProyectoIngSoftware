@@ -225,6 +225,8 @@
               <button
                 v-if="product.editMode"
                 class="border border-gray-500 hover:text-gray-700 text-gray-600 py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                :class="{ 'text-white border-white': !darkMode }"
+
                 @click="cancelEdit(product)"
               >
                 Cancelar
@@ -259,6 +261,7 @@ const showAddProductForm = ref(false)
 
 function sortTableById() {
   products.value.sort((a, b) => a.id - b.id)
+  console.log('sorteado')
 }
 
 const enableEditMode = (product) => {
@@ -305,7 +308,6 @@ const saveChanges = (product) => {
           confirmButtonColor: '#4ade80'
         })
         getProducts()
-        sortTableById()
       } catch (error) {
         console.error('Error al actualizar producto:', error)
         let errorMessage =
@@ -334,6 +336,7 @@ async function getProducts() {
   try {
     const response = await axios.get('http://localhost:3000/viewProduct')
     products.value = response.data
+    sortTableById()
   } catch (error) {
     console.error('Error al obtener productos:', error)
   }

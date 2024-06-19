@@ -1,14 +1,16 @@
 <template>
-  <div class="overflow-hidden fixed inset-0 flex items-center justify-center w-auto h-auto">
-    <div class="bg-gray-950 bg-opacity-30 fixed inset-0"></div>
+  <div
+    class="modal-container overflow-hidden fixed inset-0 flex items-center justify-center w-auto h-auto animate-fade-in-up duration-75 delay-300"
+  >
+    <div class="bg-gray-950 bg-opacity-40 fixed inset-0"></div>
     <div class="z-50">
       <div
-        class="relative shadow-lg hover:shadow-xl transition duration-300 rounded-lg bg-white w-96"
-        :class="{ 'bg-zinc-600': !darkMode }"
+        class="relative shadow-xl shadow-gray-600 transition duration-300 rounded-lg bg-white w-96"
+        :class="{ 'bg-zinc-600 shadow-gray-950': !darkMode }"
       >
         <button
           class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800 focus:outline-none"
-          :class="{ 'text-gray-100': !darkMode }"
+          :class="{ 'text-white': !darkMode }"
           @click="closeForm"
         >
           <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -41,6 +43,9 @@
               v-model="name"
               type="text"
               name="name"
+              required
+              min="10"
+              max="40"
               class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
               :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
             />
@@ -58,7 +63,10 @@
               v-model="shopping_price"
               type="number"
               name="shopping_price"
-              step="0.01"
+              step="1000"
+              required
+              min="1000"
+              max="99999999"
               class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
               :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
             />
@@ -77,18 +85,22 @@
               v-model="sale_price"
               type="number"
               name="sale_price"
-              step="0.01"
+              step="1000"
+              required
+              min="1000"
+              max="99999999"
               class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
               :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
             />
           </div>
+         
           <div class="mb-4 text-left">
             <label
               for="stock"
               class="block text-sm font-medium"
               :class="{ 'text-gray-800': darkMode, 'text-gray-100': !darkMode }"
               >
-              Precio de venta <span class="text-red-600">*</span>
+              Stock <span class="text-red-600">*</span>
               </label
             >
             <input
@@ -96,6 +108,9 @@
               v-model="stock"
               type="number"
               name="stock"
+              required
+              min="1"
+              max="2147483647"
               class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
               :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
             />
@@ -106,7 +121,7 @@
               class="block text-sm font-medium"
               :class="{ 'text-gray-800': darkMode, 'text-gray-100': !darkMode }"
               >
-              Stock <span class="text-red-600">*</span>
+              Marca Comercial <span class="text-red-600">*</span>
               </label
             >
             <input
@@ -114,6 +129,9 @@
               v-model="trademark"
               type="text"
               name="trademark"
+              required
+              min="5"
+              max="20"
               class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
               :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
             />
@@ -130,6 +148,7 @@
             <select
               id="category"
               v-model="category"
+              required
               name="category"
               class="mt-1 block w-full border border-gray-200 h-8 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
               :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
@@ -177,7 +196,15 @@ const category = ref('')
 const errorMessage = ref('')
 
 const closeForm = () => {
-  emit('close-form')
+  const formContainer = document.querySelector('.modal-container');
+  if (formContainer) {
+    formContainer.classList.add('animate-fade-out-up');
+    setTimeout(() => {
+      emit('close-form');
+    }, 300); 
+  } else {
+    emit('close-form');
+  }
 }
 
 const submitForm = async () => {
@@ -206,6 +233,9 @@ const submitForm = async () => {
     !Number.isInteger(sale_price.value) ||
     !Number.isInteger(stock.value)
   ) {
+    console.log(sale_price)
+    console.log(shopping_price)
+    console.log(stock)
     Swal.fire({
       icon: 'error',
       title: 'Oops...',

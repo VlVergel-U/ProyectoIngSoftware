@@ -207,7 +207,6 @@
               <button
                 v-if="!customer.editMode"
                 class="text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                :class="{ 'bg-yellow-600': !darkMode }"
                 @click="enableEditMode(customer)"
               >
                 <span class="material-symbols-outlined flex text-yellow-500 font-semibold hover:text-yellow-400" :class="{ 'text-yellow-600': !darkMode }">  edit_square </span>
@@ -222,7 +221,8 @@
               </button>
               <button
                 v-if="customer.editMode"
-                class="border border-gray-500 hover:text-gray-700 text-gray-600 py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                class="border border-gray-500 hover:text-gray-700 text-gray-600 py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+                :class="{ 'text-white border-white': !darkMode }"
                 @click="cancelEdit(customer)"
               >
                 Cancelar
@@ -308,7 +308,6 @@ const saveChanges = (customer) => {
           confirmButtonColor: '#4ade80'
         })
         getCustomers()
-        sortTableById()
       } catch (error) {
         console.error('Error al actualizar el cliente:', error)
         let errorMessage =
@@ -337,6 +336,7 @@ async function getCustomers() {
   try {
     const response = await axios.get('http://localhost:3000/viewCustomer')
     customers.value = response.data
+    sortTableById()
   } catch (error) {
     console.error('Error al obtener los clientes:', error)
   }

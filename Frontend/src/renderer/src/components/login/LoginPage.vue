@@ -34,7 +34,7 @@
           class="bg-zinc-950 rounded-lg p-8 space-y-4 w-96 shadow-2xl shadow-black border-2 border-zinc-900"
           @submit.prevent="submitForm"
         >
-          <div class="flex flex-col items-center relative mt-14">
+          <div class="flex flex-col items-center relative mt-10">
             <p class="text-center text-xl font-semibold text-white mb-4">Ingresa Aquí</p>
 
             <div class="w-72">
@@ -82,11 +82,11 @@
               Iniciar sesión
             </button>
           </div>
-          <a
+          <!-- <a
             class="flex justify-center text-primary-hover font-semibold cursor-pointer select-none"
             @click="goToRegister"
             >Registrar usuario</a
-          >
+          > -->
         </form>
       </div>
     </div>

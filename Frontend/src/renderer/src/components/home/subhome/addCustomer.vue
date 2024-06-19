@@ -1,14 +1,16 @@
 <template>
-  <div class="overflow-hidden fixed inset-0 flex items-center justify-center w-auto h-auto">
-    <div class="bg-gray-950 bg-opacity-30 fixed inset-0"></div>
+  <div
+    class="modal-container overflow-hidden fixed inset-0 flex items-center justify-center w-auto h-auto animate-fade-in-up duration-75 delay-300"
+  >
+    <div class="bg-gray-950 bg-opacity-40 fixed inset-0"></div>
     <div class="z-50">
       <div
-        class="relative shadow-lg hover:shadow-xl transition duration-300 rounded-lg bg-white w-96"
-        :class="{ 'bg-zinc-600': !darkMode }"
+        class="relative shadow-xl shadow-gray-600 transition duration-300 rounded-lg bg-white w-96"
+        :class="{ 'bg-zinc-600 shadow-gray-950': !darkMode }"
       >
         <button
           class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800 focus:outline-none"
-          :class="{ 'text-gray-100': !darkMode }"
+          :class="{ 'text-white': !darkMode }"
           @click="closeForm"
         >
           <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -41,6 +43,9 @@
               v-model="document"
               type="text"
               name="document"
+              required
+              min="5"
+              max="10"
               class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
               :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
             />
@@ -58,6 +63,9 @@
               id="name"
               v-model="name"
               type="text"
+              required
+              min="10"
+              max="20"
               name="name"
               class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
               :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
@@ -76,6 +84,9 @@
               id="last_name"
               v-model="last_name"
               type="text"
+              required
+              min="10"
+              max="20"
               name="last_name"
               class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
               :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
@@ -95,6 +106,9 @@
               v-model="addres"
               type="text"
               name="addres"
+              required
+              min="20"
+              max="50"
               class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
               :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
             />
@@ -105,7 +119,7 @@
               class="block text-sm font-medium"
               :class="{ 'text-gray-800': darkMode, 'text-gray-100': !darkMode }"
               >
-              Celular <span class="text-red-600">*</span>
+              Celular
               </label
             >
             <input
@@ -113,6 +127,8 @@
               v-model="phone"
               type="text"
               name="phone"
+              min="10"
+              max="20"
               class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
               :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
             />
@@ -123,7 +139,7 @@
               class="block text-sm font-medium"
               :class="{ 'text-gray-800': darkMode, 'text-gray-100': !darkMode }"
               >
-              Email <span class="text-red-600">*</span>
+              Email
               </label
             >
             <input
@@ -131,6 +147,8 @@
               v-model="email"
               type="email"
               name="email"
+              min="20"
+              max="50"
               class="mt-1 block w-full border border-gray-200 h-8 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
               :class="{ 'bg-zinc-600 text-white ': !darkMode, 'border-zinc-500': !darkMode }"
             />
@@ -163,7 +181,7 @@ import { defineEmits } from 'vue'
 const emit = defineEmits(['close-form', 'customer-added'])
 const store = useStore()
 const darkMode = computed(() => store.state.darkMode)
-const document = ref('')
+const documentCustomer = ref('')
 const name = ref('')
 const last_name = ref('')
 const addres = ref('')
@@ -172,14 +190,22 @@ const email = ref('')
 const errorMessage = ref('')
 
 const closeForm = () => {
-  emit('close-form')
+  const formContainer = document.querySelector('.modal-container');
+  if (formContainer) {
+    formContainer.classList.add('animate-fade-out-up');
+    setTimeout(() => {
+      emit('close-form');
+    }, 300); 
+  } else {
+    emit('close-form');
+  }
 }
 
 const submitForm = async () => {
   errorMessage.value = ''
 
   if (
-    !document.value ||
+    !documentCustomer.value ||
     !name.value ||
     !last_name.value ||
     !addres.value ||
@@ -202,7 +228,7 @@ const submitForm = async () => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      document: document.value,
+      document: documentCustomer.value,
       name: name.value,
       last_name: last_name.value,
       addres: addres.value,
@@ -211,7 +237,7 @@ const submitForm = async () => {
     })
   })
   if (response.ok) {
-    document.value = ''
+    documentCustomer.value = ''
     name.value = ''
     last_name.value = ''
     addres.value = ''

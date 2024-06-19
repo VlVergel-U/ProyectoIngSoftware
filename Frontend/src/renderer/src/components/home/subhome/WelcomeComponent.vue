@@ -1,11 +1,13 @@
 <template>
-  <div class="h-screen sm:w-[550px] lg:w-auto p-4">
-    <p class="text-start font-bold text-2xl mb-6 mt-2 ml-4" :class="{ 'text-white': darkMode }">
+  <div class="h-screen sm:w-[550px] lg:w-auto p-4 overflow-auto">
+    <p class="text-start font-bold text-2xl mb-6 mt-2 ml-4" :class="{ 'text-white': !darkMode }">
       Inicio
     </p>
     <!-- Mensaje de Bienvenida -->
-    <div class="w-full p-4">
-      <div class="bg-blue-100 rounded-lg shadow-md p-4">
+    <div class="w-auto h-auto p-4">
+
+      <div class="bg-blue-100 rounded-lg shadow-md p-4" :class="{ 'text-white bg-blue-950': !darkMode }"
+      >
         <p class="text-xl font-bold">¡Bienvenido!</p>
         <p class="text-md">
           Aquí puedes ver un resumen de tu actividad reciente y otros detalles importantes.
@@ -14,8 +16,8 @@
     </div>
 
     <!-- Resumen Diario -->
-    <div class="w-full p-4">
-      <div class="bg-yellow-100 rounded-lg shadow-md p-4">
+    <div class="w-auto h-auto p-4">
+      <div class="bg-yellow-100 rounded-lg shadow-md p-4" :class="{ 'text-white bg-yellow-900': !darkMode }">
         <p class="text-lg font-bold">Resumen Diario</p>
         <p class="text-md">
           Hoy has vendido un total de {{ dailySales }} productos, generando ingresos de ${{
@@ -25,11 +27,11 @@
       </div>
     </div>
 
-    <div class="flex flex-wrap justify-left">
+    <div class="flex flex-wrap justify-left w-auto h-auto">
       <!-- Widget de Productos -->
       <div class="w-full md:w-1/2 xl:w-1/4 p-4">
         <div
-          class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300"
+          class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300" :class="{ 'text-white bg-zinc-800': !darkMode }"
         >
           <div class="flex items-center mb-2">
             <span class="material-symbols-outlined"> inventory_2 </span>
@@ -48,9 +50,9 @@
       </div>
 
       <!-- Widget de Ventas -->
-      <div class="w-full md:w-1/2 xl:w-1/4 p-4">
+      <div class="w-full md:w-1/2 xl:w-1/4 p-4 w-auto h-auto">
         <div
-          class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300"
+          class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300" :class="{ 'text-white bg-zinc-800': !darkMode }"
         >
           <div class="flex items-center mb-2">
             <span class="material-symbols-outlined"> monitoring </span>
@@ -69,9 +71,9 @@
       </div>
 
       <!-- Widget de Stock -->
-      <div class="w-full md:w-1/2 xl:w-1/4 p-4">
+      <div class="w-full md:w-1/2 xl:w-1/4 p-4 w-auto h-auto">
         <div
-          class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300"
+          class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300" :class="{ 'text-white bg-zinc-800': !darkMode }"
         >
           <div class="flex items-center mb-2">
             <span class="material-symbols-outlined"> warehouse </span>
@@ -88,9 +90,9 @@
                   </span>
                 </div>
               </div>
-              <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-teal-200">
+              <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-teal-200" :class="{ 'bg-teal-600': !darkMode }">
                 <div
-                  style="width:{{ (totalStock / 1000) * 100 }}%"
+                  :style="{ width: `${(totalStock / 1000) * 100}%` }"
                   class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-teal-500"
                 ></div>
               </div>
@@ -118,8 +120,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted,computed } from 'vue'
 import axios from 'axios'
+import { useStore } from 'vuex'
+
+const store = useStore()
+const darkMode = computed(() => store.state.darkMode)
 
 const widgets = ref([
   { title: 'Productos', type: 'list', data: [] },

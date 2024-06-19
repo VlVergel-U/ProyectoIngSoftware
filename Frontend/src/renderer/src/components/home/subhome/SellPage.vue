@@ -193,8 +193,9 @@ function sortTableById() {
 
 async function getSells() {
   try {
-    const response = await axios.get('http://localhost:3000/viewSell')
+    const response = await axios.get('http://localhost:3000/viewShopping')
     sells.value = response.data
+    sortTableById()
   } catch (error) {
     console.error('Error al obtener ventas:', error)
   }
@@ -229,7 +230,7 @@ async function generatePDF() {
 async function exportToExcel() {
   const table = sellsTable.value
 
-  const columnsToSave = 5
+  const columnsToSave = 7
   const tableData = Array.prototype.map.call(table.rows, (row) => {
     return Array.prototype.slice.call(row.cells, 0, columnsToSave).map((cell) => cell.innerHTML)
   })
