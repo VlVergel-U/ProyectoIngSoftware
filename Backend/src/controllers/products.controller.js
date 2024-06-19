@@ -51,11 +51,18 @@ export const getProduct = async (req, res) => {
         if(id){
             product = await products.findOne({
                 where: { id },
+                attributes:{
+                    exclude:['category_Type']
+                },
+                include: {
+                    model: category,
+                    attributes: ['Trademark']
+                }
             });
         }else if(name){
             product= await products.findOne({
                 where:{
-                    [Op.like]: `%${name}%`,
+                    [Op.iLike]: `%${name}%`,
                 }
             })
         }
