@@ -61,8 +61,17 @@ export const getProduct = async (req, res) => {
             });
         }else if(name){
             product= await products.findOne({
-                where:{
-                    [Op.iLike]: `%${name}%`,
+                where: {
+                    name: {
+                      [Op.iLike]: `%${name}%`
+                    }
+                  },
+                attributes:{
+                    exclude:['category_Type']
+                },
+                include: {
+                    model: category,
+                    attributes: ['Trademark']
                 }
             })
         }
