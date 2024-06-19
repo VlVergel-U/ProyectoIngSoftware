@@ -16,12 +16,10 @@ export const createShopping = async (req, res) => {
   try {
     console.log(req.body);
     const {
-      unit_price,
       date_shopping,
       payment_metod,
       productName,
       amount,
-      price,
       document,
     } = req.body;
 
@@ -54,8 +52,8 @@ export const createShopping = async (req, res) => {
     }
 
     const newShopping = await shopping.create({
-      final_price: unit_price * amount,
-      unit_price,
+      final_price: product.sale_price * amount,
+      unit_price: product.sale_price,
       date_shopping,
       payment_metod,
       id_customer: customer.id_customer,
@@ -65,7 +63,7 @@ export const createShopping = async (req, res) => {
       productId: product.id,
       shoppingIdShopping: newShopping.id_shopping,
       amount,
-      price,
+      price: newShopping.final_price,
     });
 
     await product.update({ stock: newStock });
