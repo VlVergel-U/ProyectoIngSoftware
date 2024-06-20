@@ -153,7 +153,6 @@
               <div class="flex items-center justify-center">
                 <button
                   class="text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                  :class="{ 'bg-yellow-600': !darkMode }"
                   @click="generatePDF(sell)"
                 >
                   <i class="fa-solid fa-file-pdf text-red-500 text-xl"></i>

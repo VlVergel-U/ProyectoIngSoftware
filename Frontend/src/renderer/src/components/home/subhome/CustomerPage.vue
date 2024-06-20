@@ -239,7 +239,7 @@ const customers = ref([])
 const showAddCustomerForm = ref(false)
 
 function sortTableById() {
-  customers.value.sort((a, b) => a.id - b.id)
+  customers.value.sort((a, b) => a.id_customer - b.id_customer)
 }
 
 
