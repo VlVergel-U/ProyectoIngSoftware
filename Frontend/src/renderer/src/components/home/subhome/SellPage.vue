@@ -362,7 +362,7 @@ async function generatePDF(sell) {
 async function exportToExcel() {
   const table = sellsTable.value
 
-  const columnsToSave = 7
+  const columnsToSave = 6
   const tableData = Array.prototype.map.call(table.rows, (row) => {
     return Array.prototype.slice.call(row.cells, 0, columnsToSave).map((cell) => cell.innerHTML)
   })
