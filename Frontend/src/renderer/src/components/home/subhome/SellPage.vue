@@ -19,7 +19,7 @@
           <input
             v-model="identifier"
             type="text"
-            placeholder="Buscar por id o documento"
+            placeholder="Buscar por id"
             class="border border-gray-300 rounded-l-md px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 w-60 h-10"
             :class="{ 'bg-zinc-700 text-white': !darkMode, 'pr-8': close }"
             @input="close = true"
@@ -51,11 +51,11 @@
       </div>
     </div>
 
-    <add-customer-page
-      v-if="showAddCustomerForm"
+    <add-sell-page
+      v-if="showAddSellForm"
       @close-form="cancel"
-      @customer-added="getSells"
-    ></add-customer-page>
+      @sell-added="getSells"
+    ></add-sell-page>
 
     <div class="overflow-x-auto w-auto sm:h-56 lg:h-auto">
       <table
@@ -91,7 +91,7 @@
               class="px-6 py-3 text-center text-xs text-gray-500 uppercase tracking-wider sm:table-cell lg:table-cell"
               :class="{ 'text-white': !darkMode }"
             >
-              Fecha
+              Fecha y Hora
             </th>
             <th
               scope="col"
@@ -105,7 +105,7 @@
               class="px-6 py-3 text-center text-xs text-gray-500 uppercase tracking-wider sm:table-cell lg:table-cell"
               :class="{ 'text-white': !darkMode }"
             >
-              Documento Cliente
+              ID Cliente
             </th>
             <th
               scope="col"
@@ -138,7 +138,7 @@
             </td>
 
             <td class="px-6 py-3 text-center whitespace-nowrap select-none">
-              {{ sell.date_shopping }}
+              {{ formatDate(sell.date_shopping) }}
             </td>
 
             <td class="px-6 py-3 text-center whitespace-nowrap select-none">
@@ -146,7 +146,7 @@
             </td>
 
             <td class="px-6 py-3 text-center whitespace-nowrap select-none">
-              {{ sell.document }}
+              {{ sell.id_customer }}
             </td>
 
             <td class="px-6 py-3 text-center whitespace-nowrap">
@@ -154,7 +154,7 @@
                 <button
                   class="text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   :class="{ 'bg-yellow-600': !darkMode }"
-                  @click="generatePDF"
+                  @click="generatePDF(sell)"
                 >
                   <i class="fa-solid fa-file-pdf text-red-500 text-xl"></i>
                 </button>
@@ -173,6 +173,9 @@ import { useStore } from 'vuex'
 import axios from 'axios'
 import ExcelJS from 'exceljs'
 import jsPDF from 'jspdf'
+import AddSellPage from './addSell.vue'
+import Swal from 'sweetalert2'
+import logo from '../../../assets/icon_blue.png'
 
 const sellsTable = ref(null)
 const store = useStore()
@@ -201,6 +204,36 @@ async function getSells() {
   }
 }
 
+async function getSell() {
+  try {
+    const response = await axios.get(`http://localhost:3000/viewShopping/${identifier.value}`)
+    const data = response.data
+
+    if (!data || Object.keys(data).length === 0) {
+      Swal.fire({
+        title: 'Venta no encontrada',
+        text: '¿Estás seguro de haber ingresado todos los valores de búsqueda correctamente?',
+        icon: 'question',
+        confirmButtonColor: '#001b76'
+      })
+      identifier.value = ''
+      throw new Error('No se encontraron resultados para la búsqueda')
+    }
+
+    sells.value.splice(0, sells.value.length)
+    sells.value.push(data)
+  } catch (error) {
+    identifier.value = ''
+    Swal.fire({
+      title: 'Error al obtener la venta',
+      text: 'Por favor, rectifica los valores de búsqueda ingresados',
+      icon: 'error',
+      confirmButtonColor: '#001b76'
+    })
+    console.error('Error al obtener el cliente:', error)
+  }
+}
+
 const clean = () => {
   close.value = false
   identifier.value = ''
@@ -211,20 +244,119 @@ function cancel() {
   showAddSellForm.value = false
 }
 
-async function generatePDF() {
-  const doc = new jsPDF()
-  doc.text('Datos desde la Base de Datos', 10, 10)
+function formatDate(dateTimeStr) {
+  const dateTime = new Date(dateTimeStr)
+  const hours = dateTime.getHours()
+  const ampm = hours >= 12 ? 'PM' : 'AM'
+  const hours12 = hours % 12 || 12
+  const formattedDateTime = `${pad(dateTime.getDate())}/${pad(dateTime.getMonth() + 1)}/${dateTime.getFullYear()} ${pad(hours12)}:${pad(dateTime.getMinutes())} ${ampm}`
+  return formattedDateTime
+}
 
-  sells.value.forEach((item, index) => {
-    const y = 20 + index * 30
-    doc.text(`Id Venta: ${item.id_shopping}`, 10, y)
-    doc.text(`Fecha Venta: ${item.date_shopping}`, 10, y + 10)
-    doc.text(`Precio Unitario: ${item.unit_price}`, 10, y + 20)
-    doc.text(`Precio Final: ${item.final_price}`, 10, y + 30)
-    doc.text(`Método de Pago: ${item.payment_metod}`, 10, y + 40)
-  })
+function pad(number) {
+  if (number < 10) {
+    return '0' + number
+  }
+  return number
+}
 
-  doc.save('datos_desde_bd.pdf')
+async function generatePDF(sell) {
+  try {
+    const response = await axios.get(`http://localhost:3000/billing/${sell.id_shopping}`)
+    const data = response.data
+    const doc = new jsPDF()
+    const font = 'helvetica'
+    const fontSize = 12
+
+    // Logo
+    doc.addImage(logo, 'PNG', 180, 14, 15, 12)
+
+    // Encabezado
+    doc.setFont(font, 'bold')
+    doc.setFontSize(fontSize + 2)
+    doc.text('Factura de Venta', 10, 20)
+    doc.text('Solo Cauchos', 10, 25)
+    doc.line(10, 30, 200, 30) // línea de separación
+
+    // Información del cliente
+    doc.setFont(font, 'bold')
+    doc.setFontSize(fontSize)
+    doc.text('Cliente:', 10, 40)
+    doc.setFont(font, 'normal')
+    doc.text(
+      `${data.billingShopping.customer.name} ${data.billingShopping.customer.last_name}`,
+      30,
+      40
+    )
+    doc.setFont(font, 'bold')
+    doc.text('Documento:', 10, 50)
+    doc.setFont(font, 'normal')
+    doc.text(`${data.billingShopping.customer.document}`, 40, 50)
+
+    doc.setFont(font, 'bold')
+    doc.text('Dirección:', 10, 60)
+    doc.setFont(font, 'normal')
+    doc.text(`${data.billingShopping.customer.addres}`, 34, 60)
+
+    doc.setFont(font, 'bold')
+    doc.text('Teléfono:', 10, 70)
+    doc.setFont(font, 'normal')
+    doc.text(`${data.billingShopping.customer.phone}`, 32, 70)
+
+    doc.setFont(font, 'bold')
+    doc.text('Correo:', 10, 80)
+    doc.setFont(font, 'normal')
+    doc.text(`${data.billingShopping.customer.email}`, 30, 80)
+
+    doc.line(10, 90, 200, 90) // línea de separación
+
+    // Información de la venta
+    doc.setFont(font, 'bold')
+    doc.text('Venta:', 10, 100)
+    doc.setFont(font, 'normal')
+    doc.text(`N°: ${data.billingShopping.id_shopping}`, 30, 100)
+    doc.text(`Fecha: ${formatDate(data.billingShopping.date_shopping)}`, 30, 110)
+    doc.line(10, 120, 200, 120) // línea de separación
+
+    // Información del producto
+    doc.setFont(font, 'bold')
+    doc.text('Producto:', 10, 130)
+    doc.setFont(font, 'normal')
+    doc.text(`Id: ${data.billingProduct.id}`, 30, 130)
+    doc.text(`Nombre: ${data.billingProduct.name}`, 30, 140)
+    doc.text(`Marca: ${data.billingProduct.trademark}`, 30, 150)
+    doc.text(`Cantidad: ${data.billingDetail.amount}`, 30, 190)
+    doc.text(`Precio Unitario: $${data.billingProduct.sale_price}`, 30, 160)
+    doc.line(10, 170, 200, 170) // línea de separación
+
+    // Información de la compra
+    doc.setFont(font, 'bold')
+    doc.text('Compra:', 10, 180)
+    doc.setFont(font, 'normal')
+    doc.text(`Método de Pago: ${data.billingShopping.payment_metod}`, 30, 180)
+    doc.text(`Valor pagado: $${data.billingDetail.price}`, 30, 200)
+    doc.line(10, 210, 200, 210) // línea de separación
+
+    // Pie de página
+    doc.setFont(font, 'normal')
+    doc.text('¡Gracias por su compra en Solo Cauchos!', 10, 220)
+
+    // Restrict copying
+    doc.setProperties({
+      userPermissions: {
+        print: true,
+        modify: false,
+        annotate: false,
+        formFill: false,
+        extract: false,
+        assemble: false
+      }
+    })
+
+    doc.save('factura.pdf')
+  } catch (error) {
+    console.error('Error al obtener pdf:', error)
+  }
 }
 
 async function exportToExcel() {

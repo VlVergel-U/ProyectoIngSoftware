@@ -64,7 +64,7 @@
               :key="item.id"
               class="py-2 border-b border-gray-200"
             >
-              {{ item.id }} - {{ item.date }} - {{ item.buyer }}
+              {{ item.id_shopping }} - {{"$"+ item.final_price }} - {{ item.payment_metod }}
             </li>
           </ul>
         </div>
@@ -130,8 +130,7 @@ const darkMode = computed(() => store.state.darkMode)
 const widgets = ref([
   { title: 'Productos', type: 'list', data: [] },
   { title: 'Ventas', type: 'list', data: [] },
-  { title: 'Stock', type: 'text', data: 0 },
-  { title: 'Facturas', type: 'list', data: [] }
+  { title: 'Stock', type: 'text', data: 0 }
 ])
 
 const totalStock = ref(0)
@@ -143,14 +142,10 @@ onMounted(async () => {
         console.error('Error fetching products:', error)
         return { data: [] }
       }),
-      axios.get('http://localhost:3000/sales').catch((error) => {
+      axios.get('http://localhost:3000/viewShopping').catch((error) => {
         console.error('Error fetching sales:', error)
         return { data: [] }
       }),
-      axios.get('http://localhost:3000/invoices').catch((error) => {
-        console.error('Error fetching invoices:', error)
-        return { data: [] }
-      })
     ])
 
     widgets.value[0].data = responses[0].data

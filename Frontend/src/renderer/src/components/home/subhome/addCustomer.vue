@@ -40,7 +40,7 @@
             >
             <input
               id="document"
-              v-model="document"
+              v-model="documentCustomer"
               type="text"
               name="document"
               required

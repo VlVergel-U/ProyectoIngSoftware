@@ -139,35 +139,17 @@
 
             <td class="px-6 py-3 text-center whitespace-nowrap select-none">
               <template v-if="!customer.editMode">{{ customer.document }}</template>
-              <input
-                v-else
-                v-model="customer.editableDocument"
-                type="text"
-                class="w-full border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
-                :class="{ 'bg-zinc-800': !darkMode }"
-              />
+              <span v-else>{{ customer.document }}</span>
             </td>
 
             <td class="px-6 py-3 text-center whitespace-nowrap select-none">
               <template v-if="!customer.editMode">{{ customer.name }}</template>
-              <input
-                v-else
-                v-model="customer.editableName"
-                type="text"
-                class="w-full border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
-                :class="{ 'bg-zinc-800': !darkMode }"
-              />
+              <span v-else>{{ customer.name }}</span>
             </td>
 
             <td class="px-6 py-3 text-center whitespace-nowrap select-none">
               <template v-if="!customer.editMode">{{ customer.last_name }}</template>
-              <input
-                v-else
-                v-model="customer.editableLastName"
-                type="text"
-                class="w-full border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200"
-                :class="{ 'bg-zinc-800': !darkMode }"
-              />
+              <span v-else>{{ customer.last_name }}</span>
             </td>
 
             <td class="px-6 py-3 text-center whitespace-nowrap select-none">
@@ -285,10 +267,6 @@ const saveChanges = (customer) => {
   }).then(async (result) => {
     if (result.isConfirmed) {
       const updatedCustomer = {
-        id_customer: customer.editableId,
-        document: customer.editableDocument,
-        name: customer.editableName,
-        last_name: customer.editableLastName,
         addres: customer.editableAddres,
         phone: customer.editablePhone,
         email: customer.editableEmail
@@ -354,41 +332,39 @@ function cancel() {
 
 async function getCustomer() {
   try {
-    let url = `http://localhost:3000/viewCustomer/${identifier.value}`
-    let response = await fetch(url)
-
-    if (!response.ok || response.status === 404) {
-      // Si la primera búsqueda no es exitosa, intentar con el documento
-      url = `http://localhost:3000/viewCustomer/document/${identifier.value}`
-      response = await fetch(url)
+    let url = '';
+    if (identifier.value < 10) {
+      // si es un número
+      url = `http://localhost:3000/viewCustomer/${identifier.value}`;
+    } else {
+      // si es una cadena
+      url = `http://localhost:3000/viewCustomer/document/${identifier.value}`;
     }
 
-    if (!response.ok) {
-      throw new Error('Error al obtener el cliente: La solicitud no pudo ser completada.')
-    }
+    const response = await axios.get(url);
+    const data = response.data;
 
-    const data = await response.json()
     if (!data || Object.keys(data).length === 0) {
       Swal.fire({
         title: 'Cliente no encontrado',
         text: '¿Estás seguro de haber ingresado todos los valores de búsqueda correctamente?',
         icon: 'question',
         confirmButtonColor: '#001b76'
-      })
-      identifier.value = ''
-      throw new Error('No se encontraron resultados para la búsqueda')
+      });
+      identifier.value = '';
+      throw new Error('No se encontraron resultados para la búsqueda');
     }
 
-    customers.value = [data]
+    customers.value = data;
   } catch (error) {
-    identifier.value = ''
+    identifier.value = '';
     Swal.fire({
       title: 'Error al obtener el cliente',
       text: 'Por favor, rectifica los valores de búsqueda ingresados',
       icon: 'error',
       confirmButtonColor: '#001b76'
-    })
-    console.error('Error al obtener el cliente:', error)
+    });
+    console.error('Error al obtener el cliente:', error);
   }
 }
 
