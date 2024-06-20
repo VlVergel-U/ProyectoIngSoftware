@@ -26,7 +26,6 @@
         >
           <option value="" disabled selected>Seleccione una opción</option>
           <option value="client">Gestión de Clientes</option>
-          <option value="billing">Facturación</option>
           <option value="inventory">Inventario</option>
           <option value="sales">Ventas</option>
         </select>
@@ -120,17 +119,6 @@ function showHelpContent() {
                     </ul>
       `;
       break;
-    case 'billing':
-      infoText.value = `
-                    <strong>Pasos a seguir:</strong>
-                    <p>En esta sección, puedes gestionar tus facturas de manera eficiente. Aquí hay algunos pasos básicos:</p>
-                    <ol>
-                        <li>Para crear una nueva factura, haz clic en "Nueva Factura" y completa los campos necesarios.</li>
-                        <li>Puedes ver y editar las facturas existentes desde el panel de facturación.</li>
-                        <li>Para eliminar una factura, selecciona la factura y haz clic en "Eliminar".</li>
-                    </ol>
-      `;
-      break;
     case 'inventory':
       infoText.value = `
  <strong>Pasos a seguir:</strong>
@@ -189,13 +177,45 @@ function showHelpContent() {
       break;
     case 'sales':
       infoText.value = `
-  <strong>Pasos a seguir:</strong>
-                    <p>Optimiza tus ventas siguiendo estos pasos:</p>
-                    <ol>
-                        <li>Accede al módulo de ventas para ver el historial de ventas y detalles de cada transacción.</li>
-                        <li>Para registrar una nueva venta, haz clic en "Registrar Venta" y completa los detalles requeridos.</li>
-                        <li>Puedes generar reportes de ventas desde la sección de reportes para análisis y seguimiento.</li>
-                    </ol>
+            <strong>Gestión de Ventas:</strong>
+            <ol>
+                <li>
+                    <strong>Agregar Venta:</strong>
+                    <ul>
+                        <li>Haz clic en el botón azul con el icono "+" etiquetado como "Agregar Venta".</li>
+                        <li>Se abrirá un formulario emergente para ingresar los detalles de la venta.</li>
+                        <li>Completa los campos necesarios: ID del cliente, precio final, precio por unidad, fecha y hora, método de pago.</li>
+                        <li>Haz clic en el botón "Agregar" para guardar la información de la venta.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Buscar Venta:</strong>
+                    <ul>
+                        <li>En el campo de búsqueda, ingresa el ID de la venta que deseas buscar.</li>
+                        <li>Haz clic en el ícono de búsqueda (lupa) para filtrar los resultados.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Exportar a Excel:</strong>
+                    <ul>
+                        <li>Haz clic en el botón "Exportar a Excel" para descargar la lista de ventas en un archivo de Excel.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Generar PDF:</strong>
+                    <ul>
+                        <li>En la columna de "Factura", haz clic en el ícono de PDF (documento) para generar un reporte en PDF de la venta correspondiente.</li>
+                    </ul>
+                </li>
+            </ol>
+            <strong>Información Adicional:</strong>
+            <ul>
+                <li><strong>ID Cliente:</strong> Es el identificador único del cliente asociado con la venta.</li>
+                <li><strong>Precio Final:</strong> Es el monto total de la venta.</li>
+                <li><strong>Precio por Unidad:</strong> Es el precio por cada unidad vendida.</li>
+                <li><strong>Fecha y Hora:</strong> Especifica la fecha y hora de la venta.</li>
+                <li><strong>Método de Pago:</strong> Indica el método de pago utilizado para la venta (por ejemplo, Nequi, efectivo, tarjeta de crédito).</li>
+            </ul>
       `;
       break;
     default:

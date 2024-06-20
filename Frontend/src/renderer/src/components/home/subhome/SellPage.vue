@@ -112,7 +112,7 @@
               class="px-6 py-3 text-center text-xs text-gray-500 uppercase tracking-wider sm:table-cell lg:table-cell"
               :class="{ 'text-white': !darkMode }"
             >
-              Acción
+              Factura
             </th>
           </tr>
         </thead>

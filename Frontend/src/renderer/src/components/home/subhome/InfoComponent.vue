@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen sm:w-[550px] lg:w-auto lg:m-14">
+  <div class="h-screen sm:w-[550px] lg:w-[1140px] lg:m-8">
     <div class="sm:w-[550px] lg:w-auto space-y-4 sm:max-h-[80vh] overflow-y-auto scrollbar-width: thin; scrollbar-color: gray dark-gray;">
       <!-- Encabezado -->
       <div class="p-4 bg-white rounded-lg shadow-md" :class="{ 'bg-zinc-600 text-white': !darkMode }">
