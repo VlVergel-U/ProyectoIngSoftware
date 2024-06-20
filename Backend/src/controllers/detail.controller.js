@@ -56,11 +56,13 @@ export const getBilling = async (req, res) => {
         exclude: ["shopping_price", "category_Type"],
       },
     });
+
     res.json({
       billingDetail: { amount: detailRout.amount, price: detailRout.price },
       billingShopping,
       billingProduct,
     });
+    
   } catch (error) {
     console.error("Error al obtener los detalles de la compra:", error);
     return res.status(500).json({ message: error.message });

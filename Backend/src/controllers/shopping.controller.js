@@ -12,16 +12,23 @@ export const getShoppings = async (req, res) => {
   }
 };
 
+export const getShopping = async (req, res) => {
+  const { id_shopping } = req.params;
+  try {
+    const shoppings = await shopping.findOne({
+      where: { id_shopping },
+    });
+    res.json(shoppings);
+  } catch (error) {
+    return res.status(500).json({ message: error.nessage });
+  }
+};
+
 export const createShopping = async (req, res) => {
   try {
     console.log(req.body);
-    const {
-      date_shopping,
-      payment_metod,
-      productName,
-      amount,
-      document,
-    } = req.body;
+    const { date_shopping, payment_metod, productName, amount, document } =
+      req.body;
 
     const product = await products.findOne({
       where: {
