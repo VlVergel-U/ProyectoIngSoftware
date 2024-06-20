@@ -2,12 +2,13 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 import { shopping } from "./shopping.js";
 
-export const customer = sequelize.define(
-  "custmoer",
+export const customers = sequelize.define(
+  "customer",
   {
     id_customer: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      autoIncrement: true,
     },
     document: {
       type: DataTypes.STRING(10),
@@ -27,7 +28,7 @@ export const customer = sequelize.define(
       allowNull: false,
     },
     phone: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.STRING(20),
       unique: true,
     },
     email: {
@@ -39,7 +40,11 @@ export const customer = sequelize.define(
     timestamps: false,
   }
 );
-customer.hasMany(shopping, {
+customers.hasMany(shopping, {
   foreignKey: "id_customer",
   sourceKey: "id_customer",
 });
+shopping.belongsTo(customers,{
+  foreignKey: "id_customer",
+  targetId: "id_customer",
+})

@@ -1,12 +1,14 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 
+
 export const shopping = sequelize.define(
   "shopping",
   {
     id_shopping: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      autoIncrement: true,
     },
     final_price: {
       type: DataTypes.STRING(40),
@@ -29,3 +31,4 @@ export const shopping = sequelize.define(
     timestamps: false,
   }
 );
+

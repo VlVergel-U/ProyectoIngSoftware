@@ -1,18 +1,15 @@
 import server from "./app.js";
 import { sequelize } from "./database/database.js";
+
+
+
 import { createCategory, createAdmin } from "./libs/initialSetUp.js";
-
-
-const createTables = async () => {
-  await sequelize.sync({ force: true });
-};
 
 async function main() {
   try {
-    createTables().then(() => {
-      createCategory();
-      createAdmin();
-    });
+    await sequelize.sync({ force: false });
+    createCategory();
+    createAdmin();
     server.listen(3000, () => {
       console.log("Server listen on port", 3000);
     });

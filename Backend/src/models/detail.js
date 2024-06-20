@@ -10,10 +10,13 @@ export const detail = sequelize.define(
       type: DataTypes.INTEGER,
     },
     price: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DOUBLE(10, 2),
     },
   },
   {
     timestamps: false,
   }
 );
+
+products.belongsToMany(shopping, { through: detail });
+shopping.belongsToMany(products, { through: detail });

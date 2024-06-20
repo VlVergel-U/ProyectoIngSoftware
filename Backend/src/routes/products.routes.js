@@ -13,5 +13,6 @@ router.post("/addProduct", createProducts);
 router.put("/updateProduct/:id", updateProduct);
 router.delete("/products/:id");
 router.get("/viewProduct/:id", getProduct);
+router.get("/viewProduct/name/:name", getProduct)
 
 export default router;

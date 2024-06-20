@@ -32,7 +32,7 @@ export const createAdmin = async () => {
       user_name: "admin",
       poswarrd: "12345678",
     });
-    console.log("ID: " + adminFound.name);
+    console.log("ID: " + adminFound.user_name);
   } catch (error) {
     console.error(error);
   }
