@@ -55,7 +55,7 @@ export const createShopping = async (req, res) => {
     });
 
     if (!customer) {
-      return res.status(404).json({ message: "Cliente no encontrado" });
+      return res.status(405).json({ message: "Cliente no encontrado" });
     }
 
     const newShopping = await shopping.create({
