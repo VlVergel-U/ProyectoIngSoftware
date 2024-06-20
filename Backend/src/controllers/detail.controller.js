@@ -34,8 +34,11 @@ export const getBilling = async (req, res) => {
   const { shoppingIdShopping } = req.params;
   try {
     const detailRout = await detail.findOne({
-      where: { productId: shoppingIdShopping },
+      where: { shoppingIdShopping },
     });
+    if (!detailRout) {
+      return res.status(404).json({ message: "Detalle de la compra no encontrado" });
+    }
     const billingShopping = await shopping.findOne({
       where: { id_shopping: detailRout.shoppingIdShopping },
       attributes: {
